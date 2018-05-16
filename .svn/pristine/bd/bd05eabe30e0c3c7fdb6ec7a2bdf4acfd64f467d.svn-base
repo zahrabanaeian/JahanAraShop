@@ -1,0 +1,27 @@
+﻿using JahanAraShop.Data.Context;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace JahanAraShop.Controllers
+{
+    public partial class HomeController : Controller
+    {
+        // GET: Home
+        public virtual ActionResult Index()
+        {
+
+
+
+            using (var db=new DataBaseContext())
+            {
+                var good = db.tblGoods.Where(x => x.TypeID == 34).ToList();
+
+            }
+            return View();
+
+        }
+    }
+}

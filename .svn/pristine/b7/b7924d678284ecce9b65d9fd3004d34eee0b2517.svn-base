@@ -1,0 +1,83 @@
+﻿
+@using (var db = new JahanAraShop.Data.Context.DataBaseContext())
+{
+    var GoodGroup = new JahanAraShop.Models.GoodViewModel();
+    GoodGroup.FirstLevel = db.tblGoodGroups.Where(x => x.ParentID == null && x.TabletVisible == true).ToList();
+    GoodGroup.SecondLevel = db.tblGoodGroups.Where(x => x.ParentID != null && x.TabletVisible == true).ToList();
+    var list = GoodGroup.SecondLevel.Select(c => c.ID).ToList();
+    GoodGroup.ThirdLevel = db.tblGoodGroups.Where(x => list.Contains((x.ID))).ToList();
+    TempData["GoodMenu"] = GoodGroup;
+
+}
+@model JahanAraShop.Models.GoodViewModel
+
+
+<!-- navbar header -->
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+        <li class="active">
+            <a href="@Url.Action(MVC.Home.Index())">صفحه اصلی</a>
+        </li>
+        @foreach (var First in Model.FirstLevel)
+        {
+
+            <li class="menu-item-has-children mega-menu">
+                <a href="#">@First.Name</a>
+                <div class="mega-wrap">
+                    <div class="row">
+                        @foreach (var Second in Model.SecondLevel)
+                        {
+                            if (Second.ParentID == First.ID)
+                            {
+                                var ddd = Model.ThirdLevel.Where(x => x.ParentID == Second.ID).ToList();
+                                if (ddd.Count != 0)
+                                {
+                                    <div class="col-sm-3 menu-item-has-children">
+                                        <h6>@Second.Name</h6>
+                                        @foreach (var Third in Model.ThirdLevel)
+                                        {
+                                            if (Third.ParentID == Second.ID)
+                                            {
+                                                <ul>
+                                                    <li>
+                                                        <a href="shop-grid-full.html">@Third.Name</a>
+                                                    </li>
+                                                </ul>
+                                            }
+                                        }
+                                    </div>
+                                }
+                                if (ddd.Count == 0)
+                                {
+
+
+                                    <div class="menu-item-has-children">
+                                        <a>@Second.Name</a>
+                                    </div>
+
+
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            </li>
+        }
+
+        <li class="menu-item-has-children">
+            <a href="#">تماس با ما</a>
+            <ul class="sub-menu">
+                <li><a href="contact-v1.html">contact v1</a></li>
+                <li><a href="contact-v2.html">contact v2</a></li>
+            </ul>
+        </li>
+
+        @*<li class="menu-item-has-children">
+                <a href="#">درباره ما</a>
+                <ul class="sub-menu">
+                    <li><a href="contact-v1.html">contact v1</a></li>
+                    <li><a href="contact-v2.html">contact v2</a></li>
+                </ul>
+            </li>*@
+    </ul>
+</div>
