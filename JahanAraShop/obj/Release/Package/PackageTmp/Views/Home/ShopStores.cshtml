@@ -1,0 +1,54 @@
+﻿@model List<JahanAraShop.Domain.DomainModel.tblAccountBranch>
+@{
+    ViewBag.Title = "ShopStores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="pg-header jarallax overlay parlx-pad sec-mar">
+    <img class="jarallax-img" src="#" alt="">
+ 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 text-center dir">
+                <h2> فروشگاه ها</h2>
+                <ul class="breadcrumb">
+                    <li><a href="@Url.Action(MVC.Home.Index())">صفحه اصلی</a></li>
+                    <li class="active">فروشگاه ها</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<main class="main">
+    <div class="container">
+        <div class="row blog-list-wrap full-width sec-mar">
+@foreach (var item in Model)
+{
+            <div class="col-md-10 col-sm-10 col-md-offset-1 col-sm-offset-1 col-xs-12 list dir"s>
+                <div class="blog-wrap">
+                    <figure class="img-animi">
+                        <a href="#"><img src="~/Content/images/Branchs/@item.ImageBig" /></a>
+                    </figure>
+
+                    <h3 class="post-title" >
+                        <a style="color:red;">@item.Name</a>
+                    </h3>
+                    <div class="content-hold">
+                        <p>
+                            <strong>آدرس: </strong>  @item.Address
+                        </p>
+                        <p>
+                            <strong>شماره تماس: </strong>  @item.Phone1
+                        </p>
+                    </div>
+                    
+                </div>
+            </div>
+}
+
+        </div>
+    </div>
+</main>

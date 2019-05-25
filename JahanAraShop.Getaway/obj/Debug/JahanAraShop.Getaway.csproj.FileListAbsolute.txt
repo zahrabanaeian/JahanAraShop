@@ -1,0 +1,12 @@
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Getaway\bin\Debug\JahanAraShop.Getaway.dll.config
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Getaway\bin\Debug\JahanAraShop.Getaway.dll
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Getaway\bin\Debug\JahanAraShop.Getaway.pdb
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Getaway\obj\Debug\JahanAraShop.Getaway.csprojResolveAssemblyReference.cache
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Getaway\obj\Debug\JahanAraShop.Getaway.dll
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Getaway\obj\Debug\JahanAraShop.Getaway.pdb
+D:\projects\JahanAraShop\JahanAraShop.Getaway\bin\Debug\JahanAraShop.Getaway.dll.config
+D:\projects\JahanAraShop\JahanAraShop.Getaway\bin\Debug\JahanAraShop.Getaway.dll
+D:\projects\JahanAraShop\JahanAraShop.Getaway\bin\Debug\JahanAraShop.Getaway.pdb
+D:\projects\JahanAraShop\JahanAraShop.Getaway\obj\Debug\JahanAraShop.Getaway.csprojResolveAssemblyReference.cache
+D:\projects\JahanAraShop\JahanAraShop.Getaway\obj\Debug\JahanAraShop.Getaway.dll
+D:\projects\JahanAraShop\JahanAraShop.Getaway\obj\Debug\JahanAraShop.Getaway.pdb

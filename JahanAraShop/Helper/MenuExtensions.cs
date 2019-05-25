@@ -1,0 +1,28 @@
+﻿using JahanAraShop.Data.Context;
+using JahanAraShop.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace ExtensionMethods
+{
+    public static class MenuExtensions
+    {
+        public static MenuModel menu()
+        {
+            var MenuGroup = new MenuModel();
+            using (var db = new DataBaseContext())
+            {
+
+                MenuGroup.FirstLevel = db.tblGoodGroups.Where(x => x.ParentID == null && x.TabletVisible == true).ToList();
+                MenuGroup.SecondLevel = db.tblGoodGroups.Where(x => x.ParentID != null && x.TabletVisible == true).ToList();
+                var list = MenuGroup.SecondLevel.Select(c => c.ID).ToList();
+                MenuGroup.ThirdLevel = db.tblGoodGroups.Where(x => list.Contains((x.ID))).ToList();
+                MenuGroup.has = db.vwGoodGroupSites.Where(x => x.ThirdID != null).ToList();
+                MenuGroup.nohas = db.vwGoodGroupSites.Where(x => x.ThirdID == null).ToList();
+                return MenuGroup;
+            }
+        }
+    }
+}

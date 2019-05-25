@@ -1,0 +1,135 @@
+﻿@model List<JahanAraShop.Domain.DomainModel.tblSiteInformation>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="pg-header jarallax overlay parlx-pad sec-mar">
+    <img class="jarallax-img" src="~/Content/images/News/page-title3.jpg"  alt="">     
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 text-center">
+                <h2>اخبار</h2>
+                <ul class="breadcrumb dir">
+                    <li><a href="@Url.Action(MVC.Home.Index())">صفحه اصلی</a></li>
+                    <li class="active">اخبار</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--page title-->
+<main class="main">
+    <div class="container dir">
+        <div class="row blog-list-wrap modern sec-mar" id="news">  
+            
+        </div>
+        <div id="progress" style="display:none" class="loadajax">
+            <h4>
+                <img src="~/Content/images/Loading.gif"  alt="loading"/>.
+            </h4>
+        </div>
+    </div>
+</main>
+<script type="text/javascript">
+    var pageSize = 3;
+    var pageIndex = 0;
+    GetData();
+    $(document).ready(function () {
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height())
+            {
+                pageIndex++;
+                GetData();
+            }
+        });
+    });
+    function GetData() {
+        $.ajax({
+            type: 'GET',
+            url: '/News/GetData',
+            data:{"pageindex":pageIndex,"pagesize":pageSize},
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    var html="";
+                    for (var i = 0; i < data.length; i++) {
+
+                        html+="<div class='col-md-12 col-sm-12 blog-wrap'>"
+                        html += "<figure class='img-animi'>"
+                        var file = "@(JahanAraShop.Application.Resources.Paths.ImageFolder)News/" + data[i].LargePicture;
+                        fileExists(file);
+                        if (result == true)
+                        {
+                            html += "<a href='#'><img src='@(JahanAraShop.Application.Resources.Paths.ImageFolder)News/" + data[i].LargePicture + "' alt=''></a></figure>"
+                        }
+                        else
+                        {
+                            proucts += "<a  href=''><img src='@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/defult.png' alt=''></a>";
+                        }
+                        html += "<div class='post-wrap'> <div class='entry-info'><span class='entry-date pri-bg'>" + data[i].FarsiCreateDate + "</span>"
+                        html+="<span class='comment-count'><a href='#'><i class='fa fa-comments'></i> 5</a></span>"
+                        html+="<span class='post-tag'><i class='fa fa-tag'></i> <a href='#'>#Cosmatics</a> <a href='#'>#Shop</a></span>"
+                        html+= "</div> <h3 class='post-title'> <a href='#'>"+data[i].FarsiTitle+"</a></h3>"
+                        html+=  "<div class='content-hold'> <p>"+data[i].FarsiSmallDescription+"</p></div>"
+                        html+= "<a  class='btn faa-parent animated-hover' onclick='show("+data[i].IdtblInformation+")'>ادامه مطلب<i class='fa fa-long-arrow-left faa-passing'></i></a>"
+                        html += "<p class='des" + (data[i].IdtblInformation) + "'  style='display:none;'> " + data[i].FarsiDescription + "</p></div></div>"
+
+                    }
+                    $("#news").append(html);
+
+                }
+            },
+            beforeSend: function () {
+                $("#progress").show();
+            },
+            complete : function () {
+                $("#progress").hide();
+            },
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    }
+
+    function show(id) {
+        //$(".animated-hover + p").hide();
+        $(".des"+id).toggle();
+
+
+    }
+    function fileExists(fileLocation) {
+        var response = $.ajax({
+            url: fileLocation,
+            type: 'HEAD',
+            async: false
+        }).status;
+        return response;
+    }
+    var result = false;
+    function fileExists(fileLocation) {
+
+        $.ajax({
+
+            type: 'HEAD',
+            url: fileLocation,
+            async: false,
+
+            success: function () {
+                result = true;
+
+            },
+
+            error: function () {
+
+                result = false;
+            }
+
+        });
+
+    }
+</script>
+
+

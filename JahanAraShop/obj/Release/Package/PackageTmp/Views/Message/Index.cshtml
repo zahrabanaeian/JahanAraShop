@@ -1,0 +1,23 @@
+﻿@model JahanAraShop.Models.MessageViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+    <main class="main">
+        <div class="container">
+            <div class="row sec-padding">
+                <div class="col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3 text-center">
+                    <div class="sec-padding">
+                        <figure class="bm-20 error-pg-fig"><img src="assets/images/404.png" alt=""></figure>
+                        <h5>@Model.Description</h5>
+                        <a class="btn btn-link faa-parent animated-hover" href="@Url.Action(MVC.Home.Index())"><i class="fa fa-long-arrow-left faa-passing"></i> بازگشت به صفحه اصلی</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+

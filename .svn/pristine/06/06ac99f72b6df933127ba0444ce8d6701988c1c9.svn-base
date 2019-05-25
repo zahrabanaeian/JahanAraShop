@@ -1,0 +1,162 @@
+﻿using JahanAraShop.Data.Context;
+using JahanAraShop.Domain.Constants;
+using JahanAraShop.Domain.DomainModel;
+using JahanAraShop.Models;
+using JahanAraShop.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace JahanAraShop.Controllers.Bank
+{
+    public partial class PaymentController : Controller
+    {
+        private static readonly string BasketCountCookie = AppConstants.BasketCount;
+        private static readonly string BasketCookie = AppConstants.Basket;
+
+        [HttpPost]
+        public virtual ActionResult Index(InvoiceViewModel invoice)
+        {
+            var organization = invoice.Buyer;
+            invoice = (InvoiceViewModel)Session["Invoice"];
+            invoice.Buyer = organization;
+
+            try
+            {
+                var manualCode = DateTime.Now.Ticks.ToString();
+                Session["manualCode"] = manualCode;
+                Session["DeviceType"] = "Site";
+                Session["SendSms"] = true;
+                var orderId = Convert.ToInt64(manualCode); //شماره تراکنش که باید منحصر به فرد باشد
+                var additionalText = $"{orderId},{DateTime.Now}"; // توضیحات شما برای این تراکنش
+                long total;
+               
+                total = (long)invoice.TotalValue;
+                Session["PostPrice"] = long.Parse(invoice.PostCost);
+               
+               // Session["PostID"] = invoice.PostID;
+
+                Session["TotalPrice"] = total;
+                Session["DiscountValue"] = invoice.DiscountValue;
+
+
+
+                using (var db = new DataBaseContext())
+                {
+                    var bankLog = new tblBankGatewayLog
+                    {
+                        CreateDate = DateTime.Now,
+                        FarsiCreateDate = Utilities.FarsiDateTimeNow(),
+                        Pamount = total.ToString(),
+                        Porderid = orderId.ToString(),
+                        Pstatus = 1000
+                    };
+
+                    db.TblBankGatewayLogs.Add(bankLog);
+                    db.SaveChanges();
+                    Session["logId"] = bankLog.Id;
+                }
+                //var bankMellatImplement = new BankMellatImplement();
+                //var resultRequest = bankMellatImplement.BpPayRequest(orderId, total, additionalText);
+                //var statusSendRequest = resultRequest.Split(',');
+                Session.Timeout = 15;
+                // if (int.Parse(statusSendRequest[0]) == (int)BankMellatImplement.MellatBankReturnCode.ﺗﺮاﻛﻨﺶ_ﺑﺎ_ﻣﻮﻓﻘﻴﺖ_اﻧﺠﺎم_ﺷﺪ)
+                //{
+                using (var db = new DataBaseContext())
+                {
+                    int id = (int)Session["logId"];
+                    var bankLog = db.TblBankGatewayLogs.Find(id);
+                    bankLog.Pstatus = 10001;
+                    db.SaveChanges();
+                    //------------------------
+                    var provinceName = db.tblSiteStates.First(x => x.IdTbl_State == invoice.Buyer.ProvinceId).StateName;
+                    var cityName = db.tblSiteCounties.First(x => x.IdTbl_County == invoice.Buyer.CityId).CountyName;
+                    invoice.Buyer.Address = provinceName + "- " + cityName + "- " + invoice.Buyer.Address;
+                    //-----------------------
+
+                }
+                Session["InvoiceModel"] = invoice;
+                return RedirectToAction("RedirectVpos", "Payment", new { id = "1" });
+                // return RedirectToAction("RedirectVpos", "Payment", new { id = statusSendRequest[1] });
+                //}
+
+
+
+                const string title = "پرداخت آنلاین";
+                var description = "";
+                //    bankMellatImplement.DescribtionStatusCode(int.Parse(statusSendRequest[0])).Replace("_", " ");
+                TempData = new TempDataDictionary()
+            {
+                {"title", title},
+                {"description", description},
+                {"currentpage", "/Shop"},
+                {"type", MessageViewModel.MessageTypes.Error}
+            };
+                return RedirectToAction(MVC.Message.Index());
+            }
+            catch (Exception ex)
+            {
+
+                const string title = "پرداخت آنلاین";
+                var description = ex.Message + Environment.NewLine + "متاسفانه خطایی رخ داده است، لطفا مجددا عملیات خود را انجام دهید در صورت تکرار این مشکل را به بخش پشتیبانی اطلاع دهید";
+                TempData = new TempDataDictionary()
+                {
+                    {"title", title},
+                    {"description", description},
+                    {"currentpage", "/Shop"},
+                    {"type", MessageViewModel.MessageTypes.Error}
+                };
+                return RedirectToAction(MVC.Message.Index());
+            }
+
+        }
+
+        public virtual ActionResult RedirectVpos(string id)
+        {
+            try
+            {
+                if (id == null)
+                {
+
+                    const string title = "پرداخت آنلاین";
+                    const string description = "هیچ شماره پیگیری برای پرداخت از سمت بانک ارسال نشده است!";
+                    TempData = new TempDataDictionary()
+                    {
+                        {"title", title},
+                        {"description", description},
+                        {"currentpage", "/Shop"},
+                        {"type", MessageViewModel.MessageTypes.Error}
+                    };
+                    using (var db = new DataBaseContext())
+                    {
+                        var logId = (int)Session["logId"];
+                        var bankLog = db.TblBankGatewayLogs.Find(logId);
+                        bankLog.Pstatus = 0;
+                        db.SaveChanges();
+                    }
+                    return RedirectToAction(MVC.Message.Index());
+                }
+                var invoice = (InvoiceViewModel)Session["InvoiceModel"];
+
+                invoice.Items = ((IList<CartItems>)Session["CartItems"]);
+                ViewBag.id = id;
+                return View(invoice);
+            }
+            catch (Exception error)
+            {
+                const string title = "پرداخت آنلاین";
+                var description = error.Message + Environment.NewLine + "متاسفانه خطایی رخ داده است، لطفا مجددا عملیات خود را انجام دهید در صورت تکرار این مشکل را به بخش پشتیبانی اطلاع دهید";
+                TempData = new TempDataDictionary()
+                {
+                    {"title", title},
+                    {"description", description},
+                    {"currentpage", "/Shop"},
+                    {"type", MessageViewModel.MessageTypes.Error}
+                };
+                return RedirectToAction(MVC.Message.Index());
+            }
+        }
+    }
+}

@@ -1,0 +1,270 @@
+﻿@model JahanAraShop.Areas.Admin.Models.NewsViewModel
+@using JahanAraShop.Services
+@{
+    ViewBag.Title = "News";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/PersianDatePicker.min.css" rel="stylesheet" />
+<section id="main-content" class=" ">
+    <section class="wrapper main-wrapper row" style=''>
+
+        <div class='col-xs-12'>
+            <div class="page-title">
+
+                <div class="pull-right">
+                    <!-- PAGE HEADING TAG - START --><h1 class="title">File Uploader - Custom</h1><!-- PAGE HEADING TAG - END -->
+                </div>
+
+                <div class="pull-left hidden-xs">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="index.html"><i class="fa fa-home"></i>Home</a>
+                        </li>
+                        <li>
+                            <a href="form-fileupload-dropzone.html">File Uploader</a>
+                        </li>
+                        <li class="active">
+                            <strong>Custom Uploader</strong>
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <!-- MAIN CONTENT AREA STARTS -->
+        <div class="col-lg-12">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-right">ثبت اخبار</h2>
+                    <div class="actions panel_actions pull-left">
+                        <a class="box_toggle fa fa-chevron-down"></a>
+                        <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                        <a class="box_close fa fa-times"></a>
+                    </div>
+                </header>
+                <div class="content-body dr ">
+                    @using (Html.BeginForm("SaveNews", "Panel", FormMethod.Post, new { id = "Details", @class = "checkout sec-mar", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new { @class = "blockdisp text-danger" })
+
+                        <div class="row ">
+
+                            <div class="alert alert-success alert-dismissible fade in" hidden id="alerts">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                @TempData["message"]
+                            </div>
+
+                            <div class="col-xs-12">
+                                <div class="custom-dropzone row">
+                                    <div class="col-sm-8 ">
+                                        <input type="file" id="fileUp" accept=".Jpg,.png,.jpg,.jpeg,.bmp" title="search image" name="imgFa" dir="ltr" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6  fl">
+                                @{string a = Utilities.FarsiDateTimeNow();}
+
+                                @Html.LabelFor(m => m.SiteInformation.FarsiCreateDate)
+                                @Html.EditorFor(m => m.SiteInformation.FarsiCreateDate, new { htmlAttributes = new { id = "FarsiCreateDate", @class = "form-control", placeholder = "----/--/--", maxlength = "10", onclick = "PersianDatePicker.Show(this,'" + a + "')" } })
+
+                                @Html.LabelFor(m => m.SiteInformation.FarsiTitle)
+                                <label><span>*</span></label>
+                                @Html.TextBoxFor(m => m.SiteInformation.FarsiTitle, new { @class = "form-control" })
+
+
+                                @Html.LabelFor(m => m.SiteInformation.FarsiSmallDescription)
+                                <span>*</span>
+                                @Html.TextBoxFor(m => m.SiteInformation.FarsiSmallDescription, new { @class = "form-control" })
+
+                                @Html.LabelFor(m => m.SiteInformation.FarsiDescription)
+                                <span>*</span>
+                                @Html.TextAreaFor(m => m.SiteInformation.FarsiDescription, new { @class = "form-control" })
+
+                                <br />
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-purple  pull-left">ثبت</button>
+                                </div>
+                            </div>
+                        </div>
+                                    }
+                </div>
+            </section>
+                <section class="box" style=''>
+                    <div class="clearfix"></div>
+                    <!-- MAIN CONTENT AREA STARTS -->
+                    <div class="col-lg-12">
+                        <section class="box ">
+                            <header class="panel_header">
+                                <h2 class="title pull-right">اخبار</h2>
+                                <div class="actions panel_actions pull-left">
+                                    <a class="box_toggle fa fa-chevron-down"></a>
+                                    <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                                    <a class="box_close fa fa-times"></a>
+                                </div>
+                            </header>
+                            <div class="content-body">
+                                <div class="row dr">
+                                    <div class="col-xs-12">
+                                        <!-- ********************************************** -->
+                                        <table id="example" class="display table table-hover table-condensed fl">
+                                            <thead>
+                                                <tr>
+                                                    <th>ردیف</th>
+                                                    <th style="width:10%;">عکس</th>
+                                                    <th>تاریخ</th>
+                                                    <th>عنوان</th>
+                                                    <th>حذف</th>
+                                                </tr>
+                                            </thead>
+
+
+                                            @{var Row = 1;}
+                                            <tbody>
+                                                @foreach (var item in Model.ListSiteInformations)
+                                                {
+                                                    <tr>
+                                                        <td>@Row</td>
+                                                        <td>
+                                                            <figure class="pdt_thumb">
+                                                                <img style="max-width:100%;" src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)News/@(item.SmallPicture)" alt="">
+                                                            </figure>
+                                                        </td>
+                                                        <td style="width:10%;">@item.FarsiCreateDate</td>
+                                                        <td data-id="@item.IdtblInformation">@item.FarsiSmallDescription</td>
+                                                        <td class="itemDesc"><span class="fa fa-remove removeItem"></span></td>
+                                                    </tr>
+                                                    Row++;
+
+                                                }
+
+                                            </tbody>
+                                        </table>
+
+                                        <!-- MAIN CONTENT AREA ENDS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                   </div>
+                </section>
+        </div>
+
+        <div class="dir" id="dialog"></div>
+        <!-- Modal -->
+        <div class="modal fade" id="Added" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content dir">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">اخبار</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="text-align:right;">با موفقیت حذف شد</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- MAIN CONTENT AREA ENDS -->
+    </section>
+</section>
+
+
+
+@section Scripts {
+    <script src="~/Content/js/PersianDatePicker.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+
+            jQuery(".removeItem").click(function () {
+                var $this = jQuery(this)[0];
+                showConfirm("این خبر حذف شود؟", function () {
+                    $row = $this.closest("tr");
+                    jQuery($row.closest("tr")).nextAll('tr.rowItem').each(function () {//بروز کردن شماره ردیف عناصر بعدی
+                        var $radif = jQuery(this).children('.id');
+                        $radif.text(parseInt($radif.text()) - 1);
+                    });
+                    $row.remove();//حذف آیتم
+
+                    var $item = jQuery($this).closest('td').prev('td');
+                    var Infoid = $item.data("id");
+                    DeleteNews(Infoid);
+
+                });
+            });
+        });
+
+        var showConfirm = function (msg, success) {
+            jQuery("#dialog").text(msg);
+            jQuery("#dialog").dialog({
+                title: "توجه",
+                width: 500,
+                modal: true,
+                buttons: {
+                    ok: {
+                        // class: 'leftButton',
+                        text: 'بله ',
+                        click: function () {
+                            success();
+                            jQuery(this).dialog("close");
+                        }
+                    },
+                    cancel: {//class: 'leftButton',
+                        text: 'خیر',
+                        click: function () {
+                            jQuery(this).dialog("close");
+                        }
+                    }
+                }
+            });
+        };
+        var showAlert = function (msg) {
+            jQuery("#dialog").text(msg);
+            jQuery("#dialog").dialog({
+                title: "توجه",
+                width: 500,
+                modal: true,
+                buttons: {
+                    ok: {
+                        text: 'تائید ', click: function ()
+                        { jQuery(this).dialog("close"); }
+                    }
+                }
+            });
+        };
+
+
+        function DeleteNews(Infoid) {
+            $.ajax({
+                type: 'Post',
+                url: '/Panel/DeleteNews/',
+                data: { "Id": Infoid },
+                dataType: "json",
+                success: function (data) {
+
+                    if (data.isRedirect) {
+
+                        window.location.href = data.redirectUrl;
+                    }
+                    else {
+                        if (data.result) {
+
+                            $("#Added").modal();
+                            $(".modal-backdrop").detach();
+
+                        }
+
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('error: ' + textStatus + ': ' + errorThrown);
+                }
+            });
+        }
+    </script>
+}

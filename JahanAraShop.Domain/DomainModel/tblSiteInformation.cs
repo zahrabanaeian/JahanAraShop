@@ -1,5 +1,6 @@
 namespace JahanAraShop.Domain.DomainModel
 {
+    using Resourecs;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -22,14 +23,22 @@ namespace JahanAraShop.Domain.DomainModel
         public string LargePicture { get; set; }
 
         [StringLength(200)]
+        [Display(Name = "FarsiTitle", ResourceType = typeof(Labels))]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Required")]
         public string FarsiTitle { get; set; }
 
         [StringLength(500)]
+        [Display(Name = "FarsiSmallDescription", ResourceType = typeof(Labels))]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Required")]
         public string FarsiSmallDescription { get; set; }
 
+        [Display(Name = "FarsiDescription", ResourceType = typeof(Labels))]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Required")]
         public string FarsiDescription { get; set; }
 
         [StringLength(10)]
+        [Display(Name = "FarsiCreateDate", ResourceType = typeof(Labels))]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Required")]
         public string FarsiCreateDate { get; set; }
 
         public DateTime? CreateDate { get; set; }

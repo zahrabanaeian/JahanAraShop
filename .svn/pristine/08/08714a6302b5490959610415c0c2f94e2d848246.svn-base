@@ -1,0 +1,285 @@
+﻿@model JahanAraShop.Models.InvoiceViewModel
+@{
+    ViewBag.Title = "جهان آرا";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 dir">
+            <ul class="breadcrumb">
+                <li><a href="@Url.Action(MVC.Home.Index())">صفحه اصلی </a></li>
+                <li><a href="@Url.Action(MVC.Shop.ShoppingCart())">سبد خرید</a></li>
+                <li class="active">ثبت سفارش</li>
+            </ul>
+        </div>
+    </div>
+    <!--breadcrumb-->
+    <div class="checkout-info">
+    </div>
+    <!--checkout info-->
+
+    @using (Html.BeginForm("Index", "Payment", FormMethod.Post, new { id = "Details", @class = "checkout sec-mar" }))
+    {
+        <div class="row">
+            <div id="customer_details" class="col-md-8 col-sm-8 checkout-left dir dirfloat">
+                <h3>آدرس تحویل سفارش</h3>
+                <div class="row billing-fields">
+                    @*@Html.ValidationSummary()*@
+                    <div class="col-sm-6 form-group">
+                        <span style="color:red;">*</span>
+                        
+                        @Html.LabelFor(m => m.Buyer.FirstName)
+                        @Html.TextBoxFor(model => model.Buyer.FirstName)
+                        @Html.ValidationMessageFor(model => model.Buyer.FirstName, "", new { @class = "blockdisp text-danger" })
+                      
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <span style="color:red;">*</span>
+                        @Html.LabelFor(m => m.Buyer.Name)
+                        @Html.TextBoxFor(model => model.Buyer.Name)
+                        @Html.ValidationMessageFor(model => model.Buyer.Name, "", new { @class = "blockdisp text-danger" })
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <span style="color:red;">*</span>
+                        @Html.LabelFor(m => m.Buyer.CellPhone)
+                        @Html.TextBoxFor(model => model.Buyer.CellPhone)
+                        @Html.ValidationMessageFor(model => model.Buyer.CellPhone, "", new { @class = "blockdisp text-danger" })
+                       
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        @Html.LabelFor(m => m.Buyer.Email)
+                        @Html.TextBoxFor(model => model.Buyer.Email)
+                        @Html.ValidationMessageFor(model => model.Buyer.Email, "", new { @class = "blockdisp text-danger" })
+                       
+                    </div>
+
+                    <div class="col-sm-6 form-group">
+                        <span style="color:red;">*</span>
+                        <label>استان</label>
+                        @Html.DropDownListFor(m => m.Buyer.ProvinceId, Model.States, new { @class = "name-element txt ProvinceId input-validation-error", data_val = "true", data_val_required = "واردکردن فیلد استان الزامی است.", dir = "auto", id = "ProvinceId" })
+                        @Html.ValidationMessageFor(model => model.Buyer.ProvinceId, "", new { @class = "blockdisp text-danger" })
+                       
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label>شهر</label>
+                        @Html.DropDownListFor(m => m.Buyer.CityId, (IEnumerable<SelectListItem>)Model.Counties, new { @class = "name-element txt CityId input-validation-error", data_val = "true", data_val_required = "واردکردن فیلد شهر الزامی است.", dir = "auto", id = "CityId" })
+                        @Html.ValidationMessageFor(model => model.Buyer.CityId, "", new { @class = "blockdisp text-danger" })
+                       
+
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <span style="color:red;">*</span>
+                        @Html.LabelFor(m => m.Buyer.Address)
+                        @Html.TextBoxFor(model => model.Buyer.Address, new { placeholder = "آدرس" })
+                        @Html.ValidationMessageFor(model => model.Buyer.Address, "", new { @class = "blockdisp text-danger" })
+
+                    </div>
+
+                </div>
+                <div class="row additional-fields">
+                    <div class="col-sm-12 form-group">
+                        @Html.LabelFor(m => m.Buyer.Notes)
+                        @Html.TextAreaFor(model => model.Buyer.Notes, new { placeholder = "توضیحات درمورد سفارش و نحوه ارسال" })
+                        @Html.ValidationMessageFor(model => model.Buyer.Notes, "", new { @class = "blockdisp text-danger" })
+                    </div>
+                </div>
+            </div>
+            <!--left-->
+            <div class="col-md-4 col-sm-4 checkout-right dir">
+                <div class="bdr-box bm-30 ">
+                    <h3>کد تخفیف</h3>
+                    <div class="coupon">
+                        <input type="text" placeholder="Coupon Code">
+                        <input type="submit" value="اعمال">
+                    </div>
+                </div>
+                <!--coupon-->
+                <!--checkout review-->
+                @*<div class="bdr-box checkout-payment">
+                        <ul class="pay_mthd">
+                            <li>
+                                <h3> نحوه تحویل </h3>
+                                <div class="payment_box payment_method_bacs">
+                                    <p>لطفا نحوه ارسال سفارش خود را انتخاب کنید</p>
+                                </div>
+                            </li>
+                            @foreach (var item in Model.DeliverType)
+                            {
+                                <li>
+
+                                    <input type="radio" name="pay_mod" data-id="@item.id">
+                                    <label> @item.Title </label>
+                                </li>
+                            }
+                        </ul>
+
+                    </div>*@
+                <br />
+                <div class="bdr-box bm-30 bg-soft-gray checkout-review">
+                    <h3>سفارش  شما</h3>
+                    <table class="table_shop checkout_review">
+                        <tbody>
+                            @{ decimal sum = 0; short Row = 1; }
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Count</td>
+                                    <td>
+                                        @item.Price.Value.ToString("#,##0")
+                                        <span class="portraitItme">ریال</span>
+                                    </td>
+                                    @{ var total = item.Price.Value * item.Count;}
+                                </tr>
+                                            sum += total;
+                                            Row++;
+                              }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">جمع کل بدون تخفیف:</td>
+                                <td id="TotalPriceBeforeDis" data-sum="@sum">
+                                    @sum.ToString("#,##0")
+                                    <span class="portraitItme">ریال</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">هزینه ارسال:</td>
+                                <td id="PostCost" data-value="">
+                                    -
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">جمع کل:</td>
+                                <td id="TotalPrice" data-sum="@sum">
+                                    @sum.ToString("#,##0")
+                                    <span class="portraitItme" id="unit">ریال</span>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="bdr-box checkout-payment">
+                    <h3> قوانین فروشگاه </h3>
+                    <input type="checkbox" name="agree" class="dir" id="rules">
+                    @Html.ActionLink("قوانین فروشگاه", MVC.Shop.DownloadRules(), new { @style = "color:red;" })
+                    @Html.Label("", "را مطالعه نموده و آن ها را پذیرفته ام.")
+                    <div class="place-order">
+                        <input type="submit" value="ثبت نهایی خرید" class="ui-button" id="button-payment-method"  disabled>
+                    </div>
+                    <br />
+                    <div class="place-order">
+                        <input type="submit" value="بازگشت به سبد خرید">
+                    </div>
+                </div>
+            </div>
+            <!--right-->
+        </div>
+    }
+
+    <!--checkout-->
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            var PostPrice = 0;
+            $("#rules").change(function () {
+                if (this.checked) {
+                    $("#button-payment-method").removeAttr("disabled");
+                     //totalvalue
+                    var sum = parseInt($("#TotalPrice").data("sum"));
+                    var sumtotal = parseInt(sum + PostPrice);
+                  
+                    newinfo(PostPrice, sumtotal);
+                }
+                else $("#button-payment-method").attr("disabled", "true");
+            });
+
+            var $Province = $("#ProvinceId");
+            var $County = $("#CityId");
+            $Province.prepend("<option value='' disabled selected hidden>انتخاب نمایید ...</option>");
+            $($Province.change(function () {
+                var county = "<option value='' disabled selected hidden>در حال بارگذاری ...</option>";
+                $County.html(county);
+                var val = $(this).val();
+                county = "";
+                $.getJSON("/Shop/GetCounty/" + val, function (data) {
+                    county = "<option value='' disabled selected hidden>انتخاب نمایید ...</option>";
+                    $.each(data, function (index, item) {
+                        if ($("#County").val() === item.Value) {
+                            county += "<option value='" + item.Value + "' selected>" + item.Text + "</option>";
+                        }
+                        else {
+                            county += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                        }
+                    });
+                    $County.html(county);
+                });
+
+            }));
+
+
+            //PostCost
+            jQuery("#CityId").change(function () {
+                var cityName = $(this).find("option:selected").text();
+                if (cityName == 'مشهد') {
+
+                    $("#PostCost").html("رایگان");
+                    PostPrice = 0;
+                    //totalvalue
+                    var sum = parseInt($("#TotalPriceBeforeDis").data("sum"));
+                    var sumtotal = parseInt(sum + PostPrice);
+                    $('#TotalPrice').html(ReplaceNumberWithCommas(sumtotal) + "  ریال ");
+
+                }
+
+                    //if is not mashhad
+                else {
+                     PostPrice = 100000;
+                    $('#PostCost').html(ReplaceNumberWithCommas(PostPrice));
+                    //totalvalue
+                    var sum = parseInt($("#TotalPriceBeforeDis").data("sum"));
+                    var sumtotal = parseInt(sum + PostPrice);
+                   
+                    $('#TotalPrice').html(ReplaceNumberWithCommas(sumtotal) + "  ریال ");
+                    
+                    
+
+                }
+            });
+        });
+        function ReplaceNumberWithCommas(yourNumber) {
+            if (yourNumber != null) {
+                var n = yourNumber.toString().split(".");
+                n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return n.join(".");
+            }
+            else {
+                return 0;
+            }
+        }
+        function newinfo(postcost, sumtotal) {
+
+            $.ajax({
+                type: 'Post',
+                url: '/Shop/SaveInvoice/',
+                data: { "post": postcost, "totalvalue": sumtotal },
+                dataType: "bool",
+                success: function (data) {
+
+                    if (data == true) {
+                        alert(data)
+                        return true;
+
+                    }
+                    else return false;
+                },
+
+            });
+        }
+    </script>
+}

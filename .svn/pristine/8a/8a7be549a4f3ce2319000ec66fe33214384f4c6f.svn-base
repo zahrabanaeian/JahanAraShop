@@ -1,0 +1,35 @@
+﻿using JahanAraShop.Domain.DomainModel;
+using JahanAraShop.Resourecs;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace JahanAraShop.Models
+{
+    public class InvoiceViewModel
+    {
+        public IList<CartItems> Items { get; set; }
+        public IList<tblSaleDeliverType> DeliverType { get; set; }
+        public tblOrganization Buyer { get; set; }
+
+        [Range(1, 429)]
+        public System.Web.Mvc.SelectListItem[] Counties = new[]
+        {
+            new System.Web.Mvc.SelectListItem {Value = "0", Text = " "}
+        };
+        public System.Web.Mvc.SelectListItem[] States { get; set; }
+
+        [Required(ErrorMessageResourceName = "AcceptShopRule", ErrorMessageResourceType = typeof(ErrorMessages))]
+        public bool RulesChecked { get; set; }
+
+        public string PostCost { get; set; }
+        public string DiscountPrecent { get; set; }
+        public decimal TotalValue { get; set; }
+        public decimal DiscountValue { get; set; }
+
+        public int PostID { get; set; }
+
+    }
+}

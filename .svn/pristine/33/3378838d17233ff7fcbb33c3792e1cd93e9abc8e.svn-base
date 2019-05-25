@@ -1,0 +1,81 @@
+﻿using JahanAraShop.Data.Context;
+using JahanAraShop.Domain.Constants;
+using JahanAraShop.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace JahanAraShop.Controllers
+{
+    public partial class ShopController : Controller
+    {
+
+        private static string _basketCookie = AppConstants.Basket;
+        private static string _basketCountCookie = AppConstants.BasketCount;
+        // GET: Shop
+        public virtual ActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public virtual ActionResult ShoppingCart()
+        {
+
+
+            if (Request.Cookies.AllKeys.Contains(_basketCountCookie) && int.Parse(Request.Cookies[_basketCountCookie].Value) > 0)
+            {
+                using (var db = new DataBaseContext())
+                {
+                    var model = new CartViewModel();
+                    model.Items = new List<CartItems>();
+                    var st = Request.Cookies[_basketCookie].Value;
+                    var selectedGoods = st.Replace("%2C", ",").Replace("%22", "").Split(new char[3] { ',', ']', '[' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                    foreach (var sg in selectedGoods)
+                    {
+                        var item = sg.Split(':');
+                        var Barcode = item[0];
+
+                        var Goods = (from good in db.tblGoods
+                                     join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                     where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                     && good.BarCode == Barcode
+                                     select new
+                                     {
+                                         Barcode = good.BarCode,
+                                         Name = good.Name,
+                                         RetailPrice = goodsale.RetailPrice,
+                                         DiscountValue = goodsale.DiscountValue
+
+                                     }).SingleOrDefault();
+                        if (Goods != null)
+                        {
+                            model.Items.Add(new CartItems
+                            {
+                                Name = Goods.Name,
+                                Price = Goods.RetailPrice - Goods.DiscountValue,
+                                Barcode = Goods.Barcode,
+                                Count = int.Parse(item[1])
+
+
+                            });
+                        }
+                    }
+                    // var result = model.Items;
+                    //return Json(model, JsonRequestBehavior.AllowGet);
+                    return View(model);
+                }
+            }
+            else
+            {
+                //return Json("", JsonRequestBehavior.AllowGet);
+
+                return View();
+            }
+        }
+
+    }
+}

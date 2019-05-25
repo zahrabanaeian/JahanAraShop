@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace JahanAraShop.Domain.DomainModel
+{
+    [Table("tblBankGatewayLog")]
+    public class tblBankGatewayLog
+    {
+        public int Id { get; set; }
+
+        [StringLength(100)]
+        public string Porderid { get; set; }
+
+        public DateTime? CreateDate { get; set; }
+
+        [StringLength(20)]
+        public string FarsiCreateDate { get; set; }
+
+        [StringLength(100)]
+        public string Pamount { get; set; }
+
+        public int? Pstatus { get; set; }
+
+        [StringLength(500)]
+        public string PTransaction { get; set; }
+    }
+}

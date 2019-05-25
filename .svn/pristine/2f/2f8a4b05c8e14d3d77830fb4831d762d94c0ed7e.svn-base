@@ -1,0 +1,98 @@
+﻿@System.Web.Optimization.Scripts.Render("~/Content/js/js.cookie.js")
+
+<script type="text/javascript">
+    var result = false;
+    function fileExists(fileLocation) {
+
+        $.ajax({
+            type: 'HEAD',
+            url: fileLocation,
+            async: false,
+            success: function () {
+                result = true;
+            },
+
+            error: function () {
+                result = false;
+            }
+
+        });
+    }
+
+    $("#test").mouseenter(function (event) {
+        var BasketCookie = 'JahanAraShopBasket';
+        var data = [];
+        data = Cookies.get(BasketCookie);
+        if (data == undefined || data.length == 0) {
+            $("#SummeryCart").html("سبد خرید خالی میباشد");
+        }
+        else {
+            $.ajax({
+                type: 'Post',
+                url: '/Product/ShowCartItems/',
+                dataType: "json",
+                success: function (data) {
+
+                    if (!data.result) {
+                        var item = "";
+                        var totalprice = 0;
+                        item += "<h5 class='title dirfloat '>سبد خرید </h5>"
+                        item += "<ul class='scroll neo-mini-cart '>"
+                        for (var i = 0; i < data.length; i++) {
+                            item += "<li class='item'>"
+                            item += "<figure class='product-thumb'>"
+                            
+                           var file = "@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/"+data[i].BarCode +".png";
+                            fileExists(file);
+
+                            if (result == true)
+                            {
+                                item += "<a href='#'><img src='@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/" + data[i].BarCode + ".png' alt=''></a>"
+                            }
+                            else
+                            {
+
+                                item += "<a href='#'><img src='@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/defult.png' alt=''></a>"
+                            }
+
+                            item += "</figure>"
+                            item += "<div class='item-disc'>"
+                            item += "<h6 class='pri-font'>" + data[i].Name + "</h6>"
+                            item += "<span class='qty'>تعداد:" + data[i].Count + "</span>"
+                            item += "<br><span class='item-price'>قیمت:" + ReplaceNumberWithCommas(data[i].Price) + " ریال</span>"
+                            item += "</div>"
+                            item += "<a href='#' class='delete-item'><i class='pe-7s-close'></i></a>"
+                            item += "</li>"
+                           totalprice = totalprice + data[i].Price;
+
+                        }
+
+                        item += "</ul>"
+                        item += "<div class='mini-cart-total flx-element'>"
+                        item += "<span>جمع کل</span>"
+                        item += "<span>" + ReplaceNumberWithCommas(totalprice) + " ریال</span>"
+                        item += "</div>"
+                        item += "<div class='btn-hold flx-element'>"
+                        item += "<a class='btn text-uppercase' href='@Url.Action(MVC.Home.Index())'>ادامه خرید</a>"
+                        item += "<a class='btn pri-bg text-uppercase' href='checkout.html'>تکمیل خرید</a>"
+                        item += " </div>"
+                        $("#SummeryCart").html(item);
+
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('error: ' + textStatus + ': ' + errorThrown);
+                }
+
+            });
+        }
+    });
+    function ReplaceNumberWithCommas(yourNumber) {
+        var n = yourNumber.toString().split(".");
+        n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return n.join(".");
+    }
+
+
+</script>

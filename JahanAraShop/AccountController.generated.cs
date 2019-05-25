@@ -64,13 +64,6 @@ namespace JahanAraShop.Controllers
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public virtual System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> VerifyCode()
-        {
-            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.VerifyCode);
-            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
-        }
-        [NonAction]
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> ConfirmEmail()
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ConfirmEmail);
@@ -97,6 +90,19 @@ namespace JahanAraShop.Controllers
         }
         [NonAction]
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult SmsVerifyCode()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.SmsVerifyCode);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> SendSmsVerifyCode()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.SendSmsVerifyCode);
+            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public virtual System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> ExternalLoginCallback()
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ExternalLoginCallback);
@@ -108,6 +114,19 @@ namespace JahanAraShop.Controllers
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ExternalLoginConfirmation);
             return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> Authenticate()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Authenticate);
+            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
+        }
+        [NonAction]
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public virtual System.Web.Mvc.ActionResult ChangePassword()
+        {
+            return new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ChangePassword);
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
@@ -126,7 +145,6 @@ namespace JahanAraShop.Controllers
         public class ActionNamesClass
         {
             public readonly string Login = "Login";
-            public readonly string VerifyCode = "VerifyCode";
             public readonly string Register = "Register";
             public readonly string ConfirmEmail = "ConfirmEmail";
             public readonly string ForgotPassword = "ForgotPassword";
@@ -135,10 +153,13 @@ namespace JahanAraShop.Controllers
             public readonly string ResetPasswordConfirmation = "ResetPasswordConfirmation";
             public readonly string ExternalLogin = "ExternalLogin";
             public readonly string SendCode = "SendCode";
+            public readonly string SmsVerifyCode = "SmsVerifyCode";
+            public readonly string SendSmsVerifyCode = "SendSmsVerifyCode";
             public readonly string ExternalLoginCallback = "ExternalLoginCallback";
             public readonly string ExternalLoginConfirmation = "ExternalLoginConfirmation";
             public readonly string LogOff = "LogOff";
             public readonly string ExternalLoginFailure = "ExternalLoginFailure";
+            public readonly string Authenticate = "Authenticate";
             public readonly string ChangePassword = "ChangePassword";
         }
 
@@ -146,7 +167,6 @@ namespace JahanAraShop.Controllers
         public class ActionNameConstants
         {
             public const string Login = "Login";
-            public const string VerifyCode = "VerifyCode";
             public const string Register = "Register";
             public const string ConfirmEmail = "ConfirmEmail";
             public const string ForgotPassword = "ForgotPassword";
@@ -155,10 +175,13 @@ namespace JahanAraShop.Controllers
             public const string ResetPasswordConfirmation = "ResetPasswordConfirmation";
             public const string ExternalLogin = "ExternalLogin";
             public const string SendCode = "SendCode";
+            public const string SmsVerifyCode = "SmsVerifyCode";
+            public const string SendSmsVerifyCode = "SendSmsVerifyCode";
             public const string ExternalLoginCallback = "ExternalLoginCallback";
             public const string ExternalLoginConfirmation = "ExternalLoginConfirmation";
             public const string LogOff = "LogOff";
             public const string ExternalLoginFailure = "ExternalLoginFailure";
+            public const string Authenticate = "Authenticate";
             public const string ChangePassword = "ChangePassword";
         }
 
@@ -169,16 +192,6 @@ namespace JahanAraShop.Controllers
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionParamsClass_Login
         {
-            public readonly string returnUrl = "returnUrl";
-            public readonly string model = "model";
-        }
-        static readonly ActionParamsClass_VerifyCode s_params_VerifyCode = new ActionParamsClass_VerifyCode();
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public ActionParamsClass_VerifyCode VerifyCodeParams { get { return s_params_VerifyCode; } }
-        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
-        public class ActionParamsClass_VerifyCode
-        {
-            public readonly string provider = "provider";
             public readonly string returnUrl = "returnUrl";
             public readonly string model = "model";
         }
@@ -226,6 +239,23 @@ namespace JahanAraShop.Controllers
             public readonly string returnUrl = "returnUrl";
             public readonly string model = "model";
         }
+        static readonly ActionParamsClass_SmsVerifyCode s_params_SmsVerifyCode = new ActionParamsClass_SmsVerifyCode();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_SmsVerifyCode SmsVerifyCodeParams { get { return s_params_SmsVerifyCode; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_SmsVerifyCode
+        {
+            public readonly string PhoneNumber = "PhoneNumber";
+            public readonly string model = "model";
+        }
+        static readonly ActionParamsClass_SendSmsVerifyCode s_params_SendSmsVerifyCode = new ActionParamsClass_SendSmsVerifyCode();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_SendSmsVerifyCode SendSmsVerifyCodeParams { get { return s_params_SendSmsVerifyCode; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_SendSmsVerifyCode
+        {
+            public readonly string model = "model";
+        }
         static readonly ActionParamsClass_ExternalLoginCallback s_params_ExternalLoginCallback = new ActionParamsClass_ExternalLoginCallback();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_ExternalLoginCallback ExternalLoginCallbackParams { get { return s_params_ExternalLoginCallback; } }
@@ -243,12 +273,21 @@ namespace JahanAraShop.Controllers
             public readonly string model = "model";
             public readonly string returnUrl = "returnUrl";
         }
+        static readonly ActionParamsClass_Authenticate s_params_Authenticate = new ActionParamsClass_Authenticate();
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public ActionParamsClass_Authenticate AuthenticateParams { get { return s_params_Authenticate; } }
+        [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
+        public class ActionParamsClass_Authenticate
+        {
+            public readonly string model = "model";
+        }
         static readonly ActionParamsClass_ChangePassword s_params_ChangePassword = new ActionParamsClass_ChangePassword();
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public ActionParamsClass_ChangePassword ChangePasswordParams { get { return s_params_ChangePassword; } }
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionParamsClass_ChangePassword
         {
+            public readonly string cellphone = "cellphone";
             public readonly string model = "model";
             public readonly string returnUrl = "returnUrl";
         }
@@ -262,11 +301,19 @@ namespace JahanAraShop.Controllers
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
+                public readonly string ChangePassword = "ChangePassword";
+                public readonly string ForgotPassword = "ForgotPassword";
                 public readonly string Login = "Login";
                 public readonly string Register = "Register";
+                public readonly string ResetPassword = "ResetPassword";
+                public readonly string SmsVerifyCode = "SmsVerifyCode";
             }
+            public readonly string ChangePassword = "~/Views/Account/ChangePassword.cshtml";
+            public readonly string ForgotPassword = "~/Views/Account/ForgotPassword.cshtml";
             public readonly string Login = "~/Views/Account/Login.cshtml";
             public readonly string Register = "~/Views/Account/Register.cshtml";
+            public readonly string ResetPassword = "~/Views/Account/ResetPassword.cshtml";
+            public readonly string SmsVerifyCode = "~/Views/Account/SmsVerifyCode.cshtml";
         }
     }
 
@@ -297,31 +344,6 @@ namespace JahanAraShop.Controllers
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "model", model);
             ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "returnUrl", returnUrl);
             LoginOverride(callInfo, model, returnUrl);
-            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
-        }
-
-        [NonAction]
-        partial void VerifyCodeOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string provider, string returnUrl);
-
-        [NonAction]
-        public override System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> VerifyCode(string provider, string returnUrl)
-        {
-            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.VerifyCode);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "provider", provider);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "returnUrl", returnUrl);
-            VerifyCodeOverride(callInfo, provider, returnUrl);
-            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
-        }
-
-        [NonAction]
-        partial void VerifyCodeOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, JahanAraShop.Models.VerifyCodeViewModel model);
-
-        [NonAction]
-        public override System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> VerifyCode(JahanAraShop.Models.VerifyCodeViewModel model)
-        {
-            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.VerifyCode);
-            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "model", model);
-            VerifyCodeOverride(callInfo, model);
             return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
         }
 
@@ -456,6 +478,42 @@ namespace JahanAraShop.Controllers
         }
 
         [NonAction]
+        partial void SmsVerifyCodeOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string PhoneNumber);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult SmsVerifyCode(string PhoneNumber)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.SmsVerifyCode);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "PhoneNumber", PhoneNumber);
+            SmsVerifyCodeOverride(callInfo, PhoneNumber);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void SmsVerifyCodeOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, JahanAraShop.Models.VerifyCodeViewModel model);
+
+        [NonAction]
+        public override System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> SmsVerifyCode(JahanAraShop.Models.VerifyCodeViewModel model)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.SmsVerifyCode);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "model", model);
+            SmsVerifyCodeOverride(callInfo, model);
+            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
+        }
+
+        [NonAction]
+        partial void SendSmsVerifyCodeOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, JahanAraShop.Models.ForgotPasswordViewModel model);
+
+        [NonAction]
+        public override System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> SendSmsVerifyCode(JahanAraShop.Models.ForgotPasswordViewModel model)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.SendSmsVerifyCode);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "model", model);
+            SendSmsVerifyCodeOverride(callInfo, model);
+            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
+        }
+
+        [NonAction]
         partial void ExternalLoginCallbackOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string returnUrl);
 
         [NonAction]
@@ -503,13 +561,26 @@ namespace JahanAraShop.Controllers
         }
 
         [NonAction]
-        partial void ChangePasswordOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+        partial void AuthenticateOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, JahanAraShop.Models.LoginViewModel model);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult ChangePassword()
+        public override System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> Authenticate(JahanAraShop.Models.LoginViewModel model)
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Authenticate);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "model", model);
+            AuthenticateOverride(callInfo, model);
+            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
+        }
+
+        [NonAction]
+        partial void ChangePasswordOverride(T4MVC_System_Web_Mvc_ActionResult callInfo, string cellphone);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult ChangePassword(string cellphone)
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ChangePassword);
-            ChangePasswordOverride(callInfo);
+            ModelUnbinderHelpers.AddRouteValues(callInfo.RouteValueDictionary, "cellphone", cellphone);
+            ChangePasswordOverride(callInfo, cellphone);
             return callInfo;
         }
 

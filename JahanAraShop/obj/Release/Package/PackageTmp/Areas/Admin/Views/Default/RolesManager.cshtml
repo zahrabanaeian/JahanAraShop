@@ -1,0 +1,209 @@
+﻿
+@{
+    ViewBag.Title = "RolesManager";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<section id="main-content">
+    <section class="wrapper main-wrapper row" style=''>
+
+        <div class='col-xs-12'>
+            <div class="page-title">
+
+                <div class="pull-right">
+                    <!-- PAGE HEADING TAG - START --><h1 class="title">مدیریت نقش ها</h1><!-- PAGE HEADING TAG - END -->
+                </div>
+
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <!-- MAIN CONTENT AREA STARTS -->
+        @* declareRoles *@
+
+        <div class="col-lg-6">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-right">تعریف نقش</h2>
+                    <div class="actions panel_actions pull-left">
+                        <a class="box_toggle fa fa-chevron-down"></a>
+                        <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                        <a class="box_close fa fa-times"></a>
+                    </div>
+                </header>
+                <div class="content-body dr">
+                    @using (Html.BeginForm("Create", "Default", FormMethod.Post, new { id = "logoutForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary()
+                        <div class="row ">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label">نام نقش</label>
+                                    <div class="controls">
+                                        @Html.TextBox("RoleName", null, new { @class = "form-control valid blockdisp text-danger", @data_val = "true", @data_val_required = "پر کردن نام ضروری است." })
+                                    </div>
+                                </div>
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-success">ذخیره</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </section>
+        </div>
+
+        @* showroles *@
+        <div class="col-lg-6">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-right">نمایش نقش کاربر</h2>
+                    <div class="actions panel_actions pull-right">
+                        <a class="box_toggle fa fa-chevron-down"></a>
+                        <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                        <a class="box_close fa fa-times"></a>
+                    </div>    
+                </header>
+                <div class="content-body dr">
+                    <form id="icon_validate" action="#">
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label">نام کاربر</label>
+
+                                    <div class="controls">
+                                        <i class=""></i>
+                                        <input type="text" class="form-control" id="username">
+
+                                    </div>
+                                </div>
+                                <div class="pull-right " style="padding-bottom:15px;">
+                                    <button type="submit" id="show" class="btn btn-success">نمایش</button>
+                                </div>
+                                <div class="controls">
+                                    <input type="text" class="form-control" id="labe">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </section>
+        </div>
+       @* delete *@
+        <div class="col-lg-6">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-right">حذف نقش به کاربر</h2>
+                    <div class="actions panel_actions pull-right">
+                        <a class="box_toggle fa fa-chevron-down"></a>
+                        <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                        <a class="box_close fa fa-times"></a>
+                    </div>
+                </header>
+                <div class="content-body dr">
+                    @using (Html.BeginForm(MVC.Admin.Default.DeleteRoleForUser()))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="form-label">نام کاربر</label>
+                                    <div class="controls">
+                                        <i class=""></i>
+                                        @Html.TextBox("PhoneNumber", null, new { @class = "form-control valid blockdisp text-danger", @data_val = "true", @data_val_required = "پر کردن نام ضروری است." })
+                                        <label class="form-label">نام نقش</label>
+                                        <div class="ui-dropdowns" data-example-id="button-dropdown-sizing">
+                                            <div class="btn-group">
+                                                @Html.DropDownList("RoleName", (IEnumerable<SelectListItem>)ViewBag.Roles, "انتخاب ...", new { @data_val = "true", @data_val_required = "پر کردن نام ضروری است." })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pull-right " style="padding-bottom:15px;">
+                                    <button type="submit" class="btn btn-success"> حذف</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+        </div>
+        
+        @* addroletouser *@
+        <div class="col-lg-6">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-right">تخصیص نقش به کاربر</h2>
+                    <div class="actions panel_actions pull-right">
+                        <a class="box_toggle fa fa-chevron-down"></a>
+                        <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                        <a class="box_close fa fa-times"></a>
+                    </div>
+                </header>
+                <div class="content-body dr">
+                   @using (Html.BeginForm(MVC.Admin.Default.RoleAddToUser()))
+                   {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="form-label">نام کاربر</label>
+                                <div class="controls">
+                                    <i class=""></i>
+                                    @Html.TextBox("CellPhone", null, new { @class = "form-control valid blockdisp text-danger", @data_val = "true", @data_val_required = "پر کردن نام ضروری است." })
+                                    <label class="form-label">نام نقش</label>
+                                    <div class="ui-dropdowns" data-example-id="button-dropdown-sizing">
+                                        <div class="btn-group">
+                                            @Html.DropDownList("RoleName", (IEnumerable<SelectListItem>)ViewBag.Roles, "انتخاب ...", new { @data_val = "true", @data_val_required = "پر کردن نام ضروری است." })
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pull-right " style="padding-bottom:15px;">
+                                <button type="submit" class="btn btn-success">ذخیره</button>
+                            </div>
+
+                        </div>
+                    </div>
+                   }
+                </div>
+            </section>
+        </div>  
+        <!-- MAIN CONTENT AREA ENDS -->
+    </section>
+</section>
+
+<script type="text/javascript">
+    $("#show").click(function () {
+
+        var username = $("#username").val();
+        $.ajax({
+            type: 'Post',
+            url: '/Default/GetRoles/',
+            data: { "userName": username },
+            success: function (data) {
+
+                $("#labe").val(data);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('error: ' + textStatus + ': ' + errorThrown);
+            }
+        });
+    });
+
+
+
+
+
+</script>

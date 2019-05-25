@@ -76,12 +76,18 @@ namespace JahanAraShop.Controllers
         public class ActionNamesClass
         {
             public readonly string Index = "Index";
+            public readonly string Aboutus = "Aboutus";
+            public readonly string Contactus = "Contactus";
+            public readonly string ShopStores = "ShopStores";
         }
 
         [GeneratedCode("T4MVC", "2.0"), DebuggerNonUserCode]
         public class ActionNameConstants
         {
             public const string Index = "Index";
+            public const string Aboutus = "Aboutus";
+            public const string Contactus = "Contactus";
+            public const string ShopStores = "ShopStores";
         }
 
 
@@ -95,9 +101,15 @@ namespace JahanAraShop.Controllers
             public _ViewNamesClass ViewNames { get { return s_ViewNames; } }
             public class _ViewNamesClass
             {
+                public readonly string Aboutus = "Aboutus";
+                public readonly string Contactus = "Contactus";
                 public readonly string Index = "Index";
+                public readonly string ShopStores = "ShopStores";
             }
+            public readonly string Aboutus = "~/Views/Home/Aboutus.cshtml";
+            public readonly string Contactus = "~/Views/Home/Contactus.cshtml";
             public readonly string Index = "~/Views/Home/Index.cshtml";
+            public readonly string ShopStores = "~/Views/Home/ShopStores.cshtml";
         }
     }
 
@@ -110,10 +122,43 @@ namespace JahanAraShop.Controllers
         partial void IndexOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
 
         [NonAction]
-        public override System.Web.Mvc.ActionResult Index()
+        public override System.Threading.Tasks.Task<System.Web.Mvc.ActionResult> Index()
         {
             var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Index);
             IndexOverride(callInfo);
+            return System.Threading.Tasks.Task.FromResult(callInfo as System.Web.Mvc.ActionResult);
+        }
+
+        [NonAction]
+        partial void AboutusOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult Aboutus()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Aboutus);
+            AboutusOverride(callInfo);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void ContactusOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult Contactus()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.Contactus);
+            ContactusOverride(callInfo);
+            return callInfo;
+        }
+
+        [NonAction]
+        partial void ShopStoresOverride(T4MVC_System_Web_Mvc_ActionResult callInfo);
+
+        [NonAction]
+        public override System.Web.Mvc.ActionResult ShopStores()
+        {
+            var callInfo = new T4MVC_System_Web_Mvc_ActionResult(Area, Name, ActionNames.ShopStores);
+            ShopStoresOverride(callInfo);
             return callInfo;
         }
 

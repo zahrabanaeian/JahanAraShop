@@ -147,9 +147,6 @@
   <data name="ForgottenPassword" xml:space="preserve">
     <value>رمز عبور خود را فراموش کرده اید؟</value>
   </data>
-  <data name="girls" xml:space="preserve">
-    <value>دخترانه</value>
-  </data>
   <data name="Hello" xml:space="preserve">
     <value>سلام</value>
   </data>
@@ -191,5 +188,59 @@
   </data>
   <data name="UserName" xml:space="preserve">
     <value>نام کاربری(شماره موبایل)</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>جهان آرا</value>
+  </data>
+  <data name="FarsiBirthDate" xml:space="preserve">
+    <value>تاریخ تولد</value>
+  </data>
+  <data name="FarsiMarriageDate" xml:space="preserve">
+    <value>تاریخ ازدواج</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>توضیحات فارسی</value>
+  </data>
+  <data name="FarsiTitle" xml:space="preserve">
+    <value>عنوان فارسی</value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>اولویت</value>
+  </data>
+  <data name="FarsiCreateDate" xml:space="preserve">
+    <value>تاریخ</value>
+  </data>
+  <data name="FarsiDescription" xml:space="preserve">
+    <value>توضیحات خبر</value>
+  </data>
+  <data name="FarsiSmallDescription" xml:space="preserve">
+    <value>مختصر خبر</value>
+  </data>
+  <data name="DescriptionReview" xml:space="preserve">
+    <value>متن نظر شما</value>
+  </data>
+  <data name="TitleReview" xml:space="preserve">
+    <value>عنوان نظر شما</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>ازتاریخ</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>تا تاریخ</value>
+  </data>
+  <data name="DiscountCode" xml:space="preserve">
+    <value>کد تخفیف</value>
+  </data>
+  <data name="CustomerName" xml:space="preserve">
+    <value>نام مشتری</value>
+  </data>
+  <data name="DiscountPercent" xml:space="preserve">
+    <value>درصد تخفیف</value>
+  </data>
+  <data name="DiscountValue" xml:space="preserve">
+    <value>مبلغ تخفیف</value>
+  </data>
+  <data name="FarsiExpiredate" xml:space="preserve">
+    <value>مهلت استفاده</value>
   </data>
 </root>

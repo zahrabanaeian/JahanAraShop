@@ -1,0 +1,16 @@
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Resourecs\bin\Release\JahanAraShop.Resourecs.dll
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Resourecs\bin\Release\JahanAraShop.Resourecs.pdb
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.csprojResolveAssemblyReference.cache
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.ErrorMessages.resources
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.Labels.resources
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.csproj.GenerateResource.Cache
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.dll
+D:\banaeian.zahra\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.pdb
+D:\projects\JahanAraShop\JahanAraShop.Resourecs\bin\Release\JahanAraShop.Resourecs.dll
+D:\projects\JahanAraShop\JahanAraShop.Resourecs\bin\Release\JahanAraShop.Resourecs.pdb
+D:\projects\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.csprojResolveAssemblyReference.cache
+D:\projects\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.ErrorMessages.resources
+D:\projects\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.Labels.resources
+D:\projects\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.csproj.GenerateResource.Cache
+D:\projects\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.dll
+D:\projects\JahanAraShop\JahanAraShop.Resourecs\obj\Release\JahanAraShop.Resourecs.pdb

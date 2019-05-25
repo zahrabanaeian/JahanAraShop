@@ -1,0 +1,282 @@
+﻿@model JahanAraShop.Models.CartViewModel
+@{
+    ViewBag.Title = "جهان آرا";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="pg-header jarallax overlay parlx-pad sec-mar">
+    <img class="jarallax-img" src="~/Content/images/page-title.jpg" alt="">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 text-center">
+                <h2>سبد خرید</h2>
+                <ul class="breadcrumb dir">
+                    <li><a href="@Url.Action(MVC.Home.Index())">صفحه اصلی</a></li>
+                    <li class="active">سبد خرید</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<main class="main cart dir ">
+    <div class="container">
+        <form action="#">
+            <div class="row sec-mar">
+
+                <div class="col-md-12 col-sm-12">
+                    <table class="table_shop">
+                        <thead>
+                            <tr>
+                                <th class="pdt_remove"></th>
+                                <th class="pdt_name">محصولات</th>
+                                <th class="pdt_price">قیمت واحد</th>
+                                <th class="pdt_qty">تعداد</th>
+                                <th class="pdt_subtotal">قیمت کل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{decimal sum = 0;}
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr class="crt_itm">
+                                    <td class="pdt_remove removeItem" data-title="Remove"> <a href="#"><i class="pe-7s-close"></i></a> </td>
+                                    <td class="pdt_name" data-title="Product name">
+                                        @if (System.IO.File.Exists(Server.MapPath(JahanAraShop.Application.Resources.Paths.ImageFolder + "Products" + "/") + (item.Barcode) + ".png"))
+                                        {
+                                            <figure class="pdt_thumb">
+                                                <img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.Barcode).png" alt="">
+                                            </figure>
+                                        }
+                                        else
+                                        {
+                                            <figure class="pdt_thumb">
+                                                <img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/defult.png" alt="">
+                                            </figure>
+
+                                        }
+                                        <span class="pdt_title">@item.Name</span>
+                                    </td>
+                                    @{ var total = item.Price.Value * item.Count;}
+                                    <td class="pdt_price" data-title="Price">@item.Price.Value.ToString("#,##0")</td>
+                                    <td class="pdt_qty itemDesc" data-title="Quantity" data-total="@(Convert.ToDouble(total))" data-price="@(Convert.ToDouble(item.Price.Value))" data-count="@(item.Count)" data-code="@(item.Barcode)">
+                                        <a href="javascript:void(0)" class="ArrowDown fa fa-caret-down"></a>
+                                        <span style="color:#2a2929;" class="Count">
+                                            &nbsp;&nbsp; @item.Count  &nbsp;&nbsp;
+                                        </span>
+                                        <a href="javascript:void(0)" class="ArrowUp fa fa-caret-up"></a>
+                                    </td>
+
+                                    <td class="pdt_subtotal sumTotal" data-title="Total" data-total="@(Convert.ToDouble(total))">@total.ToString("#,##0") ریال</td>
+                                </tr>
+                                            sum += total;
+                                        }
+                            <!--single item-->
+
+                            <tr>
+                                <td colspan="5" class="cupon-action">
+                                    <div class="flx-element">
+                                        @*<div class="coupon">
+                                                <input type="text" placeholder="Coupon Code">
+                                                <input type="submit" value="Apply Coupon">
+                                            </div>*@
+                                        <!--coupon-->
+                                        <a class="btn btn_cart" href='@Url.Action(MVC.Home.Index())'>بازگشت به صفحه اصلی</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--shop table-->
+
+                <div class="bdr-box cart-collaterals">
+
+                    <table class="table_shop">
+                        <tbody>
+                            <tr>
+                                <td>جمع کل بدون تخفیف</td>
+                                <td id="TotalPrice">
+                                    @(sum.ToString("#,##0"))
+                                    <span class="portraitItme">ریال</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>تخفیف</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>جمع کل</td>
+                                <td id="TotalPriceAtferDiscount">
+                                    @(sum.ToString("#,##0"))
+                                    <span class="portraitItme">ریال</span>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a class="btn pri-bg" href="@Url.Action(MVC.Shop.Authenticate())">ادامه ثبت سفارش</a>
+                </div>
+
+            </div>
+            <div class="dir" id="dialog"></div>
+        </form>
+    </div>
+</main>
+@section Scripts {
+    @System.Web.Optimization.Scripts.Render("~/Content/js/js.cookie.js")
+    <script>
+
+        var BasketCookie = 'JahanAraShopBasket';
+        var BasketCountCookie = 'JahanAraShopBasketCount';
+        jQuery(document).ready(function () {
+
+            jQuery(".ArrowUp").click(function () {
+                var item = jQuery(this)[0];
+                SubPlus(item, 1);
+            });
+
+            jQuery(".ArrowDown").click(function () {
+                var item = jQuery(this)[0];
+                SubPlus(item, -1);
+            });
+
+            jQuery(".removeItem").click(function () {
+                var $this = jQuery(this)[0];
+                showConfirm("کالای مورد نظر حذف خواهد شد. آیا اطمینان از حذف آن دارید؟", function () {
+                    $row = $this.closest("tr");
+                    jQuery($row.closest("tr")).nextAll('tr.rowItem').each(function () {//بروز کردن شماره ردیف عناصر بعدی
+                        var $radif = jQuery(this).children('.id');
+                        $radif.text(parseInt($radif.text()) - 1);
+                    });
+
+                    var $item = jQuery($this).closest("tr").children('.itemDesc');
+                    var cod = $item.data("code");
+                    var count = parseInt($item.data("count"));
+                    var json_str = Cookies.get(BasketCookie);
+                    var arr = JSON.parse(json_str);
+                    var newArr = [];
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i].slice(0, arr.indexOf(':') - 1) != cod)
+                            newArr.push(arr[i]);
+                    }
+                    Cookies.set(BasketCookie, JSON.stringify(newArr));
+                    //کم کردن یک واحد از تعداد آبتم های داخل سبد کالا
+                    var ct = parseInt(Cookies.get(BasketCountCookie)) - 1;
+                    Cookies.set(BasketCountCookie, ct);
+                    jQuery(".BasketCount").html(ct);
+
+
+                    $row.remove();//حذف آیتم
+
+
+                    //محاسبه مجموع خرید
+                    var $total = jQuery('#TotalPrice');
+                    var totalSum = 0;
+                    jQuery('.sumTotal').each(function () {
+                        totalSum += parseFloat(jQuery(this).data("total"));
+                    });
+                    $total.html(ReplaceNumberWithCommas(totalSum + "  ریال "));
+
+                    var $TotalAfterDiscount = jQuery('#TotalPriceAtferDiscount');
+                    var totalAfterDiscountSum = 0;
+                    jQuery('.sumTotal').each(function () {
+                        totalAfterDiscountSum += parseFloat(jQuery(this).data("total"));
+                    });
+                    $TotalAfterDiscount.html(ReplaceNumberWithCommas(totalAfterDiscountSum) + "  ریال ");
+                    var data = [];
+                    data = Cookies.get(BasketCookie);
+                    if (data == undefined || data.length == 0 || data == "[]") {
+                        var item = "";
+                        item += "<div></div>"
+                        item += "<h4 style='text-align:center;'>سبد خرید  شما خالیست!</h4>"
+                        $(".table_shop").html(item);
+                        $(".bdr-box").css("display", "none");
+                    }
+                });
+            });
+        });
+
+
+        function SubPlus(item, oprator) {
+            var $item = jQuery(item);
+            var $td = $item.closest("td");
+            var code = $td.data("code");
+            var count = parseInt($td.data("count")) + oprator;
+            if (count <= 0) return;
+            var price = parseFloat($td.data("price"));
+            var totalRowPrice = price * count;
+            Plus(code + ':' + (count - oprator), code + ':' + count);
+            //ثبت تعداد جدید در قسمت نمایش تعداد
+            $td.data("count", count).children(".Count").html("&nbsp;&nbsp;&nbsp;" + count + "&nbsp;&nbsp;&nbsp;");
+            $td.next().html(ReplaceNumberWithCommas(totalRowPrice) + "  ریال ")
+            .data("total", totalRowPrice);
+            //محاسبه مجموع خرید
+            var $total = jQuery('#TotalPrice');
+            var totalSum = 0;
+            jQuery('.sumTotal').each(function () {
+                totalSum += parseFloat(jQuery(this).data("total"));
+            });
+            $total.html(ReplaceNumberWithCommas(totalSum) + "  ریال ");
+
+
+            var $TotalAfterDiscount = jQuery('#TotalPriceAtferDiscount');
+            var totalAfterDiscountSum = 0;
+            jQuery('.sumTotal').each(function () {
+                totalAfterDiscountSum += parseFloat(jQuery(this).data("total"));
+            });
+            $TotalAfterDiscount.html(ReplaceNumberWithCommas(totalAfterDiscountSum) + "  ریال ");
+
+
+
+        }
+        //تنظیم کوکی
+        function Plus(prevHandle, newHandle) {
+            var json_str = Cookies.get(BasketCookie);
+            var arr = JSON.parse(json_str);
+            arr[arr.indexOf(prevHandle)] = newHandle;
+            //اضافه کردن آرایه به کوکی به شکل جیسون
+            Cookies.set('JahanAraShopBasket', JSON.stringify(arr));
+        }
+
+        var showConfirm = function (msg, success) {
+            jQuery("#dialog").text(msg);
+            jQuery("#dialog").dialog({
+                title: "توجه",
+                width: 500,
+                modal: true,
+                buttons: {
+                    ok: {
+                        // class: 'leftButton',
+                        text: 'بله ',
+                        click: function () {
+                            success();
+                            jQuery(this).dialog("close");
+                        }
+                    },
+                    cancel: {//class: 'leftButton',
+                        text: 'خیر',
+                        click: function () {
+                            jQuery(this).dialog("close");
+                        }
+                    }
+                }
+            });
+        };
+
+        var showAlert = function (msg) {
+            jQuery("#dialog").text(msg);
+            jQuery("#dialog").dialog({
+                title: "توجه",
+                width: 500,
+                modal: true,
+                buttons: {
+                    ok: {
+                        text: 'تائید ', click: function ()
+                        { jQuery(this).dialog("close"); }
+                    }
+                }
+            });
+        };
+
+    </script>
+}

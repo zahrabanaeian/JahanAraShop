@@ -1,0 +1,103 @@
+﻿@model JahanAraShop.Models.ChangePasswordViewModel
+@{
+    ViewBag.Title = "تغییر پسورد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dash-pg-header pg-header style2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 flx-element wrap">
+                <div class="left">
+                    <h4 class="bm-0 text-white">حساب کاربری شما</h4>
+                </div>
+                <!--left-->
+                <ul class="breadcrumb">
+                    <li class="active">حساب کاربری</li>
+                    <li><a href="@Url.Action(MVC.Home.Index())">صفحه اصلی</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<main class="dash-content bg-soft-gray sec-padding">
+    <div class="container">      
+        <div class="row">
+            <div class="col-sm-12">  
+                <nav class="account-nav">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <span class="icon radius-circle"><i class="pe-7s-keypad"></i></span> داشبورد
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="icon radius-circle"><i class="pe-7s-cart"></i></span> سفارشات شما
+                            </a>
+                        </li>
+
+                        <li class="active">
+                            <a href="@Url.Action(MVC.Account.ChangePassword())">
+                                <span class="icon radius-circle"><i class="pe-7s-map-marker"></i></span> تغییر پسورد
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action(MVC.User.Index())">
+                                <span class="icon radius-circle"><i class="pe-7s-user"></i></span> پروفایل
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action(MVC.User.WishList())">
+                                <span class="icon radius-circle"><i class="fa fa-star-o"></i></span> علاقه مندی ها
+                            </a>
+                        </li>
+                        <li>
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <a href="javascript:document.getElementById('logoutForm').submit()">
+                                    <span class="icon radius-circle"><i class="pe-7s-plug"></i></span> خروج
+                                </a>
+                            }
+                        </li>
+                    </ul>
+                </nav>
+                <div class="account-content dir">
+                    <div class="ErrorMessage"> <span>  @ViewBag.Message</span></div>
+                    @using (Html.BeginForm(MVC.Account.ChangePassword(), FormMethod.Post, new { id = "Details", @class = "checkout sec-mar" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.OldPassword)
+                                @Html.PasswordFor(m => m.OldPassword, new { id = "OldPass" })
+                                @Html.ValidationMessageFor(model => model.OldPassword, "", new { @class = "blockdisp text-danger" })
+                            </div>
+                            <!--current pass-->
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.NewPassword)
+                                @Html.PasswordFor(m => m.NewPassword, new { id = "NewPass" })
+                                @Html.ValidationMessageFor(model => model.NewPassword, "", new { @class = "blockdisp text-danger" })
+                            </div>
+                            <!--new pass-->
+                            <div class="form-group col-sm-6">
+                                @Html.LabelFor(m => m.ConfirmPassword)
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { id = "ConfirmPass" })
+                                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "blockdisp text-danger" })
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <input type="submit" value="ویرایش">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+

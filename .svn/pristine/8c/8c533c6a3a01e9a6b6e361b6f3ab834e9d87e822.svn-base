@@ -1,0 +1,142 @@
+﻿@using JahanAraShop.Getaway
+@using JahanAraShop.Resourecs
+@model JahanAraShop.Models.InvoiceViewModel
+@{
+    ViewBag.Title = "RedirectVpos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<main class="main cart dir ">
+    <div class="container">
+        <div class="row sec-mar border">
+            <div class="col-md-12 col-sm-12">
+                <br />
+                <h3>مشخصات مشتری</h3>
+                <div class="checkout-product">
+                    <b>@Labels.BuyerName: @(Model.Buyer.FirstName + " " + Model.Buyer.Name)</b><br /><br />
+                    <b>@Labels.CellPhone: @Model.Buyer.CellPhone</b> <br /><br />
+                    <b>@Labels.BuyerAddress: @Model.Buyer.Address</b><br /><br />
+                    <b>@Labels.Tel: @Model.Buyer.Phone1</b> <br /><br />
+                    <b>@Labels.Email: @Model.Buyer.Email</b>
+                </div>
+                <br />
+            </div>
+            <!--shop table-->
+        </div>
+    </div>
+    <div class="container">
+        <div class="row sec-mar ">
+            <div class="col-md-12 col-sm-12 bdr-box">
+                <table class="table_shop">
+                    <thead>
+                        <tr>
+                            <th class="pdt_qty">ردیف</th>
+                            <th class="pdt_name">محصولات</th>
+                            <th class="pdt_price">قیمت واحد</th>
+                            <th class="pdt_qty">تعداد</th>
+                            <th class="pdt_subtotal">قیمت کل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{ decimal sum = 0; short Row = 1; decimal total = 0; }
+                        @foreach (var item in Model.Items)
+                        {
+                            { total = item.Price.Value * item.Count; }
+                            <tr class="crt_itm">
+                                <td>@Row</td>
+                                <td>@item.Name</td>
+
+                                <td class="pdt_price" data-title="Price">
+                                    @item.Price.Value.ToString("#,##0")
+                                    <span class="portraitItme">ریال</span>
+                                </td>
+                                <td>@item.Count</td>
+                                <td class="pdt_price" data-title="Price">
+                                    @total.ToString("#,##0")
+                                    <span class="portraitItme">ریال</span>
+                                </td>
+
+                            </tr>
+                            sum += total;
+                            Row++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!--shop table-->
+            <div class="bdr-box cart-collaterals">
+                <table class="table_shop">
+                    <tbody>
+                        @{
+
+                            var post = Model.PostCost;
+                            var sumTotal = (sum - sum * int.Parse(Model.DiscountPrecent) / 100) + int.Parse(post);
+                            var discountval = sum * int.Parse(Model.DiscountPrecent) / 100;
+
+                        }
+                        <tr>
+                            <td>تخفیف</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>هزینه پست</td>
+                            <td id="TotalPrice" data-sum="@post">
+                                @int.Parse(post).ToString("#,##0")
+                                <span class="portraitItme">ریال</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>جمع کل</td>
+                            <td id="TotalPriceAtferDiscount" data-sum="@sumTotal">
+                                @(sumTotal.ToString("#,##0"))
+                                <span class="portraitItme">ریال</span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+                <form method="post" name="formBank" id="formBank" action="@Url.Action(MVC.Payment.test())">
+                 @*<form method="post" name="formBank" id="formBank" action="@Url.Action(MVC.Payment.SaveLocalInvoice())">*@
+                    <i id="LoadingElement" style="display:none; margin-right:50%;" class="fa fa-lg fa fa-spinner fa-spin"></i>
+                    <input type="hidden" value="@ViewBag.id" id="RefId" name="RefId">
+                    <a id="btnPaypal" name="btnPaypal" onclick="SaveInvoice()" class="btn pri-bg">
+                        <i class="fa"></i>پرداخت اینترنتی
+                    </a>
+                   @Html.Hidden("RedirectTo", Url.Action("Errorpage", "Payment"))
+                </form>
+                <a class="btn pri-bg" href="@Url.Action(MVC.Shop.ShoppingCart())">ادامه خرید</a>
+            </div>
+
+        </div>
+        <div class="dir" id="dialog"></div>
+
+    </div>
+</main>
+<script>
+    function SaveInvoice() {
+        $('#LoadingElement').show();
+        $('#btnPaypal').hide();
+        var url = $("#RedirectTo").val();
+        $.ajax({
+            type: "POST",
+            url: "/Payment/SaveLocalInvoice",
+            success: function (data) {
+                if (data == true) {
+                    $("#formBank").submit();
+                }
+                else {
+                    location.href = url;
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+    }
+</script>

@@ -97,6 +97,15 @@ namespace JahanAraShop.Resourecs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to جهان آرا.
+        /// </summary>
+        public static string CompanyName {
+            get {
+                return ResourceManager.GetString("CompanyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to تکرار کلمه عبور.
         /// </summary>
         public static string ConfirmPassword {
@@ -106,11 +115,65 @@ namespace JahanAraShop.Resourecs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to نام مشتری.
+        /// </summary>
+        public static string CustomerName {
+            get {
+                return ResourceManager.GetString("CustomerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to توضیحات فارسی.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to متن نظر شما.
+        /// </summary>
+        public static string DescriptionReview {
+            get {
+                return ResourceManager.GetString("DescriptionReview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to توضیحات.
         /// </summary>
         public static string Descriptions {
             get {
                 return ResourceManager.GetString("Descriptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کد تخفیف.
+        /// </summary>
+        public static string DiscountCode {
+            get {
+                return ResourceManager.GetString("DiscountCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to درصد تخفیف.
+        /// </summary>
+        public static string DiscountPercent {
+            get {
+                return ResourceManager.GetString("DiscountPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مبلغ تخفیف.
+        /// </summary>
+        public static string DiscountValue {
+            get {
+                return ResourceManager.GetString("DiscountValue", resourceCulture);
             }
         }
         
@@ -133,6 +196,69 @@ namespace JahanAraShop.Resourecs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to تاریخ تولد.
+        /// </summary>
+        public static string FarsiBirthDate {
+            get {
+                return ResourceManager.GetString("FarsiBirthDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تاریخ.
+        /// </summary>
+        public static string FarsiCreateDate {
+            get {
+                return ResourceManager.GetString("FarsiCreateDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to توضیحات خبر.
+        /// </summary>
+        public static string FarsiDescription {
+            get {
+                return ResourceManager.GetString("FarsiDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مهلت استفاده.
+        /// </summary>
+        public static string FarsiExpiredate {
+            get {
+                return ResourceManager.GetString("FarsiExpiredate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تاریخ ازدواج.
+        /// </summary>
+        public static string FarsiMarriageDate {
+            get {
+                return ResourceManager.GetString("FarsiMarriageDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مختصر خبر.
+        /// </summary>
+        public static string FarsiSmallDescription {
+            get {
+                return ResourceManager.GetString("FarsiSmallDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to عنوان فارسی.
+        /// </summary>
+        public static string FarsiTitle {
+            get {
+                return ResourceManager.GetString("FarsiTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to نام.
         /// </summary>
         public static string FirsName {
@@ -151,11 +277,11 @@ namespace JahanAraShop.Resourecs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to دخترانه.
+        ///   Looks up a localized string similar to ازتاریخ.
         /// </summary>
-        public static string girls {
+        public static string FromDate {
             get {
-                return ResourceManager.GetString("girls", resourceCulture);
+                return ResourceManager.GetString("FromDate", resourceCulture);
             }
         }
         
@@ -241,6 +367,15 @@ namespace JahanAraShop.Resourecs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to اولویت.
+        /// </summary>
+        public static string Priority {
+            get {
+                return ResourceManager.GetString("Priority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ثبت نام.
         /// </summary>
         public static string Register {
@@ -273,6 +408,24 @@ namespace JahanAraShop.Resourecs {
         public static string Tel {
             get {
                 return ResourceManager.GetString("Tel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to عنوان نظر شما.
+        /// </summary>
+        public static string TitleReview {
+            get {
+                return ResourceManager.GetString("TitleReview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تا تاریخ.
+        /// </summary>
+        public static string ToDate {
+            get {
+                return ResourceManager.GetString("ToDate", resourceCulture);
             }
         }
         

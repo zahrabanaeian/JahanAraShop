@@ -1,0 +1,263 @@
+﻿@model JahanAraShop.Areas.Admin.Models.DicountCodeViewModel
+@using JahanAraShop.Services
+@{
+    ViewBag.Title = "CreateDiscountcode";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/css/PersianDatePicker.min.css" rel="stylesheet" />
+<link href="~/Areas/Admin/Contents/css/select2.min.css" rel="stylesheet" />
+<section id="main-content">
+    <section class="wrapper main-wrapper row" style=''>
+
+        <div class='col-xs-12'>
+            <div class="page-title">
+
+                <div class="pull-right">
+                    <!-- PAGE HEADING TAG - START --><h1 class="title">File Uploader - Custom</h1><!-- PAGE HEADING TAG - END -->
+                </div>
+
+                <div class="pull-left hidden-xs">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="index.html"><i class="fa fa-home"></i>Home</a>
+                        </li>
+                        <li>
+                            <a href="form-fileupload-dropzone.html">File Uploader</a>
+                        </li>
+                        <li class="active">
+                            <strong>Custom Uploader</strong>
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <!-- MAIN CONTENT AREA STARTS -->
+        <div class="col-lg-12">
+            <section class="box ">
+                <header class="panel_header">
+                    <h2 class="title pull-right">کد تخفیف</h2>
+                    <div class="actions panel_actions pull-left">
+                        <a class="box_toggle fa fa-chevron-down"></a>
+                        <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
+                        <a class="box_close fa fa-times"></a>
+                    </div>
+                </header>
+                <div class="content-body dr ">
+
+                    <div class="row ">
+
+                        <div class="alert alert-success alert-dismissible fade in" hidden id="alerts">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="col-xs-6  fl">
+                            @{string a = Utilities.FarsiDateTimeNow();}
+
+                            @Html.LabelFor(m => m.SiteDiscountCode.FarsiExpiredate)
+                            @Html.EditorFor(m => m.SiteDiscountCode.FarsiExpiredate, new { htmlAttributes = new { id = "FarsiExpiredate", @class = "form-control", placeholder = "----/--/--", maxlength = "10", onclick = "PersianDatePicker.Show(this,'" + a + "')" } })
+
+                            <label><span>*</span></label>                        
+                            @Html.DropDownListFor(m => m.SiteDiscountCode.OrganizationID, Model.CustomerList, new { @class = "form-control", data_val = "true", dir = "auto", id = "CustomerList" })
+
+
+                            @Html.LabelFor(m => m.SiteDiscountCode.DiscountPercent)
+                            <span>*</span>
+                            @Html.TextBoxFor(m => m.SiteDiscountCode.DiscountPercent, new { id = "DiscountPercent", @class = "form-control", @type = "number", @min = "0",@max="100", @step = "1", Value = 0 })
+
+                            @Html.LabelFor(m => m.SiteDiscountCode.DiscountValue)
+                            
+                            <span>*</span>
+                            @Html.TextBoxFor(m => m.SiteDiscountCode.DiscountValue, new { @class = "form-control", id = "DiscountValue", @type = "number", @min = "0", @step = "1" ,Value=0})
+
+                            @Html.LabelFor(m => m.SiteDiscountCode.Description)
+                            @Html.TextAreaFor(m => m.SiteDiscountCode.Description, new { @class = "form-control", id = "Description", Value = "-" })
+                            <br />
+                            <div class="form-group">
+                                <button onclick="save()" class="btn btn-success" pull-left">افزودن به لیست</button>
+                            </div>
+                        </div>
+
+                        <table id="show" class="display table table-hover table-condensed"></table>
+                        <div class="col-lg-12 col-md-12" style="display:none" id="btnsave">
+                            <span class="submit">
+                                <button onclick="savelist()" class="btn btn-primary pull-right marginleft15 SaveGiftCards"><i class="fa fa-check-circle"></i>ذخیره</button>
+                            </span>
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <div class="dir" id="dialog"></div>
+        <!-- Modal -->
+        <div class="modal fade" id="Added" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content dir">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">اخبار</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p style="text-align:right;">با موفقیت حذف شد</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- MAIN CONTENT AREA ENDS -->
+    </section>
+</section>
+@section Scripts{
+
+    <script src="~/Areas/Admin/Contents/js/select2.min.js"></script>
+    <script src="~/Content/js/PersianDatePicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //search in dropdown
+            $("#CustomerList").select2();
+        });
+
+        var array = new Array();
+        var html = "";
+        var Row = 1;
+        html += "<thead style='text-align:center'><tr><th>ردیف</th><th>مشتری</th><th>مهلت استفاده</th><th>درصد تخفیف</th><th>مبلغ تخفیف</th><th>توضیحات</th><th>حذف</th></tr></thead><tbody>"
+        function save() {
+
+            $("#btnsave").show();
+            var expiredate = $("#FarsiExpiredate").val();
+            var DiscountPercent = $("#DiscountPercent").val();
+            var DiscountValue = $("#DiscountValue").val();
+            var orgid = $('#CustomerList :selected').val();
+            var orgname = $('#CustomerList :selected').text();
+            var discription = $("#Description").val();
+
+            if (orgid == null) { return alert("لطفا مشتری مورد نظر را مشخص کنید");}
+            var model = {
+                expiredate,
+                DiscountPercent,
+                DiscountValue,
+                orgid,
+                discription,
+                orgname
+
+                };
+
+            //store in sessionstorage
+            if (sessionStorage.getItem('DiscountCodeShop') === null) {
+                var array = [];
+                array.push(model);
+                sessionStorage.setItem('DiscountCodeShop', JSON.stringify(array));
+
+            }
+            else {
+                var array = JSON.parse(sessionStorage.getItem('DiscountCodeShop'));
+                array.push(model);
+                // Re-set back to sessionStorage
+                sessionStorage.setItem('DiscountCodeShop', JSON.stringify(array));
+
+            }
+
+
+            html += " <tr style='text-align:center' class='crt_itm'>"
+            html += "<td>" + Row + "</td>"
+            html += "<td>" + orgname + "</td>"
+            html += "<td>" + expiredate + "</td>"
+            html += "<td>" + DiscountPercent + "</td>"
+            html += "<td>" + ReplaceNumberWithCommas(DiscountValue) + "</td>"
+            html += "<td>" + discription + "</td>"
+            html += "<td class='removeItem' onclick='deletes()' data-id= '" + Row + "' data-title='حذف'> <a><i class='fa fa-remove'></i></a></td>"
+            Row++;
+            $("#show").html(html);
+            $("#DiscountPercent").val('0');
+            $("#DiscountValue").val('0');
+            $("#FarsiExpiredate").val('');
+            $("#CustomerList").val('');
+            $("#Description").val('-');
+        }
+
+        function savelist() {
+            var array = JSON.parse(sessionStorage.getItem('DiscountCodeShop'));
+            $.ajax({
+                type: 'Post',
+                url: '/Panel/SaveDiscountcode/',
+                dataType: "json",
+                data: { model: array },
+                success: function (data) {
+                    if (data == true) {
+                        sessionStorage.clear();
+                        $("#show").empty();
+                        html = "";
+                        html += "<thead style='text-align:center'><tr><th>ردیف</th><th>مشتری</th><th>مهلت استفاده</th><th>درصد تخفیف</th><th>مبلغ تخفیف</th><th>توضیحات</th><th>حذف</th></tr></thead><tbody>"
+                        Row = 1;
+                        $("#btnsave").hide();
+                        alert('با موفقیت ارسال شد');
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    sessionStorage.clear();
+                    html="";
+                    $("#show").html(html);
+                    alert('error: ' + 'ثبت اطلاعات با خطا مواجه شد دوباره تلاش کنید');
+                }
+
+
+            });
+
+        }
+        function ReplaceNumberWithCommas(yourNumber) {
+            if (yourNumber != null) {
+                var n = yourNumber.toString().split(".");
+                n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return n.join(".");
+            }
+            else {
+                return 0;
+            }
+        }
+        function deletes() {
+
+            $("#show").on('click', '.removeItem', function () {
+                var row = $(this).data("id");
+                $(this).closest('tr').remove();
+                //update array
+                var array = JSON.parse(sessionStorage.getItem('DiscountCodeShop'));
+                array.splice((row - 1), 1);
+                array = array;
+                //
+                html = "";
+                Row = 1;
+                html += "<thead style='text-align:center'><tr><th>ردیف</th><th>مشتری</th><th>مهلت استفاده</th><th>درصد تخفیف</th><th>مبلغ تخفیف</th><th>توضیحات</th><th>حذف</th></tr></thead><tbody>"
+                for (var i = 0; i < array.length; i++)
+                {
+
+                    html += " <tr style='text-align:center' class='crt_itm'>"
+                    html += "<td>" + Row + "</td>"
+                    html += "<td>" + array[i].orgname + "</td>"
+                    html += "<td>" + array[i].expiredate + "</td>"
+                    html += "<td>" + array[i].DiscountPercent + "</td>"
+                    html += "<td>" + ReplaceNumberWithCommas(array[i].DiscountValue) + "</td>"
+                    html += "<td>" + array[i].discription + "</td>"
+                    html += "<td class='removeItem' onclick='deletes()' data-id= '" + Row + "' data-title='حذف'> <a><i class='fa fa-remove'></i></a></td>"
+                    Row++;
+                }
+               
+                
+                $("#show").html(html);
+                
+               
+
+                // Re-set back to sessionStorage
+                sessionStorage.setItem('DiscountCodeShop', JSON.stringify(array));
+
+            });
+        }
+    </script>
+
+
+
+}

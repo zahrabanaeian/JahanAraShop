@@ -1,0 +1,193 @@
+﻿using JahanAraShop.Data.Context;
+using JahanAraShop.Domain.DomainModel;
+using JahanAraShop.Helper;
+using JahanAraShop.Models;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace JahanAraShop.Controllers
+{
+    public partial class ProductController : Controller
+    {
+        [ActionName("Products")]
+        public virtual ActionResult Index()
+        {
+            return View();
+        }
+
+
+        public virtual ActionResult Categories(int groupid)
+        {
+
+
+            ViewBag.GroupID = groupid;
+            return View();
+       
+
+
+        }
+
+
+        public virtual ActionResult  GetPagingCategories(int pageNumber, int pageSize, int GroupID,string ChekedBrands)
+        {
+            List<int> checkedbrands = new List<int>();
+            
+            using (var db = new DataBaseContext())
+            {
+             
+                if (ChekedBrands != "")
+                {
+                    checkedbrands = ChekedBrands.Split(',').Select(Int32.Parse).ToList();
+                    var model = new GoodViewModel();
+                    model.CategoriesGoods = new List<Goods>();       
+                    var CategoriesGood = (from good in db.tblGoods
+                                          join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                          where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                          && good.GoodGroupID == GroupID && checkedbrands.Contains(good.TypeID??0)
+                                          select new
+                                          {
+                                              good.ID,
+                                              good.Name,
+                                              good.BarCode,
+                                              good.GoodGroupID,
+                                              good.Code,
+                                              goodsale.RetailPrice,
+                                              good.Notes,
+                                              good.TypeID,
+                                              good.SiteVisible,
+                                              good.TabletVisible,
+                                              good.CreateDate,
+                                              good.FarsiCreateDate,
+                                              good.Sequence,
+                                          }).ToList();
+
+                    foreach (var item in CategoriesGood)
+                    {
+                        model.CategoriesGoods.Add(new Goods
+                        {
+                            ID = item.ID,
+                            BarCode = item.BarCode,
+                            GoodGroupID = item.GoodGroupID,
+                            Code = item.Code,
+                            Name = item.Name,
+                            RetailPrice = item.RetailPrice,
+                            Notes = item.Notes,
+                            TypeID = item.TypeID,
+                            SiteVisible = item.SiteVisible,
+                            TabletVisible = item.TabletVisible,
+                            Sequence = item.Sequence,
+                        });
+                    }
+
+                    var Goodtypes = (from good in db.tblGoods
+                                     join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                     join type in db.tblGoodTypes on good.TypeID equals type.ID
+                                     where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                     && good.GoodGroupID == GroupID
+                                     orderby type.ID
+                                    select type
+                                    
+                                   ).Distinct().ToList();
+
+                    var Minprice = (from good in db.tblGoods
+                                    join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                    join type in db.tblGoodTypes on good.TypeID equals type.ID
+                                    where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                    && good.GoodGroupID == GroupID && checkedbrands.Contains(good.TypeID ?? 0)
+                                    select new { goodsale.RetailPrice }).Min(x=>x.RetailPrice);
+
+                    var Maxprice = (from good in db.tblGoods
+                                    join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                    join type in db.tblGoodTypes on good.TypeID equals type.ID
+                                    where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                    && good.GoodGroupID == GroupID && checkedbrands.Contains(good.TypeID ?? 0)
+                                    select new { goodsale.RetailPrice }).Max(x => x.RetailPrice);
+
+                    var PagedData = Pagination.PagedResult(model.CategoriesGoods, Goodtypes, checkedbrands, pageNumber, pageSize,Minprice,Maxprice);
+                    return Json(PagedData, JsonRequestBehavior.AllowGet);
+                }
+
+                else
+                {
+
+                    var model = new GoodViewModel();
+                    model.CategoriesGoods = new List<Goods>();
+
+
+                    var CategoriesGood = (from good in db.tblGoods
+                                          join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                          where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                          && good.GoodGroupID == GroupID
+                                          select new
+                                          {
+                                              good.ID,
+                                              good.Name,
+                                              good.BarCode,
+                                              good.GoodGroupID,
+                                              good.Code,
+                                              goodsale.RetailPrice,
+                                              good.Notes,
+                                              good.TypeID,
+                                              good.SiteVisible,
+                                              good.TabletVisible,
+                                              good.CreateDate,
+                                              good.FarsiCreateDate,
+                                              good.Sequence,
+                                          }).ToList();
+
+                    foreach (var item in CategoriesGood)
+                    {
+                        model.CategoriesGoods.Add(new Goods
+                        {
+                            ID = item.ID,
+                            BarCode = item.BarCode,
+                            GoodGroupID = item.GoodGroupID,
+                            Code = item.Code,
+                            Name = item.Name,
+                            RetailPrice = item.RetailPrice,
+                            Notes = item.Notes,
+                            TypeID = item.TypeID,
+                            SiteVisible = item.SiteVisible,
+                            TabletVisible = item.TabletVisible,
+                            Sequence = item.Sequence,
+                        });
+                    }
+
+                    var Goodtypes = (from good in db.tblGoods
+                                     join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                     join type in db.tblGoodTypes on good.TypeID equals type.ID
+                                     where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                     && good.GoodGroupID == GroupID
+                                     orderby type.ID
+                                     select type
+
+                               ).Distinct().ToList();
+
+                    var Minprice = (from good in db.tblGoods
+                                    join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                    join type in db.tblGoodTypes on good.TypeID equals type.ID
+                                    where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                    && good.GoodGroupID == GroupID
+                                    select new { goodsale.RetailPrice }).Min(x => x.RetailPrice);
+
+                    var Maxprice = (from good in db.tblGoods
+                                    join goodsale in db.tblGoodSaleInfoes on good.BarCode equals goodsale.Barcode
+                                    join type in db.tblGoodTypes on good.TypeID equals type.ID
+                                    where good.TabletVisible == true && goodsale.RetailPrice != 0 && goodsale.PricingMethodID == 14
+                                    && good.GoodGroupID == GroupID
+                                    select new { goodsale.RetailPrice }).Max(x=>x.RetailPrice);
+
+                    var PagedData = Pagination.PagedResult(model.CategoriesGoods,Goodtypes, checkedbrands, pageNumber, pageSize, Minprice, Maxprice);
+                    return Json(PagedData, JsonRequestBehavior.AllowGet);
+
+                }
+            }
+
+            
+        }
+    }
+}

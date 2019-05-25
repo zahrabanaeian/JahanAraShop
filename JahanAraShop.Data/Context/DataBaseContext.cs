@@ -27,7 +27,17 @@ namespace JahanAraShop.Data.Context
         public virtual DbSet<tblSiteInformation> tblSiteInformations { get; set; }
         public virtual DbSet<tblSiteInformationType> tblSiteInformationTypes { get; set; }
         public virtual DbSet<tblSiteState> tblSiteStates { get; set; }
-  
+        public virtual DbSet<tblSiteWishList> tblSiteWishLists { get; set; }
+        public virtual DbSet<tblBankGatewayLog> TblBankGatewayLogs { get; set; }
+        public virtual DbSet<TblAtashTabletParameters> TblAtashTabletParameters { get; set; }
+        public virtual DbSet<tblSiteReview> TblSiteReview { get; set; }
+        public virtual DbSet<vwGoodGroupSite> vwGoodGroupSites { get; set; }
+        public virtual DbSet<TblSiteSlideShow> TblSiteSlideShow { get; set; }
+        public virtual DbSet<spBestSaleGoods> spBestSaleGoods { get; set; }
+        public virtual DbSet<tblAccountBranch> tblAccountBranches { get; set; }
+        public virtual DbSet<tblSiteDiscountCode> tblSiteDiscountCodes { get; set; }
+
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -345,10 +355,7 @@ namespace JahanAraShop.Data.Context
                 .IsFixedLength()
                 .IsUnicode(false);
 
-            modelBuilder.Entity<tblSaleInvoice>()
-                .Property(e => e.FarsiLastLotteryPrintDate)
-                .IsFixedLength()
-                .IsUnicode(false);
+    
 
             modelBuilder.Entity<tblSaleInvoice>()
                 .HasMany(e => e.tblSaleInvoiceDetails)
@@ -379,6 +386,86 @@ namespace JahanAraShop.Data.Context
             modelBuilder.Entity<tblSaleInvoiceDetail>()
                 .Property(e => e.ServicedBarCode)
                 .IsUnicode(false);
+
+
+            modelBuilder.Entity<vwGoodGroupSite>()
+               .Property(e => e.FirstName)
+               .IsUnicode(false);
+
+            modelBuilder.Entity<vwGoodGroupSite>()
+                .Property(e => e.SecondName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<vwGoodGroupSite>()
+                .Property(e => e.ThirdName)
+                .IsUnicode(false);
+
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.Code)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.Name2)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.Name3)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.Description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.LinkedServerName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.DBName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.Phone1)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.CodePerfix)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.Phone2)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.WebSite)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.Fax)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.longitude)
+                .HasPrecision(9, 6);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .Property(e => e.latitude)
+                .HasPrecision(9, 6);
+
+            modelBuilder.Entity<tblAccountBranch>()
+                .HasMany(e => e.tblAccountBranch1)
+                .WithOptional(e => e.tblAccountBranch2)
+                .HasForeignKey(e => e.ParentID);
+
+
+            modelBuilder.Entity<tblSiteDiscountCode>()
+                   .Property(e => e.DiscountPercent)
+                   .HasPrecision(19, 4);
+
+            modelBuilder.Entity<tblSiteDiscountCode>()
+                .Property(e => e.DiscountValue)
+                .HasPrecision(19, 4);
 
         }
     }

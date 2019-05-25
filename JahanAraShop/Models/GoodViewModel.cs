@@ -12,6 +12,12 @@ namespace JahanAraShop.Models
         public List<Goods> NewestGoods { get; set; }
         public List<Goods> BestSellingGoods { get; set; }
         public List<Goods> CategoriesGoods { get; set; }
+        public List<Goods> Good { get; set; }
+        public List<tblSiteInformation> TblSiteInformations { get; set; }
+        public tblSiteReview Reviews { get; set; }
+        public List<tblSiteReview> ReviewsList { get; set; }
+        public List<TblSiteSlideShow> SlideShows { get; set; }
+
     }
     public class Goods
     {
@@ -21,6 +27,8 @@ namespace JahanAraShop.Models
         public int? GoodGroupID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
+        //کد وزارت بهداشت
+        public string Name3 { get; set; }
         public decimal? RetailPrice { get; set; }
         public string Notes { get; set; }
         public int? TypeID { get; set; }  
@@ -29,8 +37,11 @@ namespace JahanAraShop.Models
         public int? Sequence { get; set; }
         public DateTime? CreateDate { get; set; }
         public string FarsiCreateDate { get; set; }
+        public decimal? DiscountPercent { get; set; }
+        public decimal? DiscountValue { get; set; }
 
-       
+        public bool HasRemiand { get; set; }
+
     }
 
   

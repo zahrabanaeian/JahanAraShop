@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,8 +22,9 @@ namespace JahanAraShop.Domain.Constants
 
 
         //Coockie keys
-        public static string Basket = "NininazShopBasket";
-        public static string BasketCount = "NininaziShopBasketCount";
+        public static string Basket = "JahanAraShopBasket";
+        public static string BasketCount = "JahanAraShopBasketCount";
+        
 
 
         public static string Title = "title";
@@ -35,15 +37,32 @@ namespace JahanAraShop.Domain.Constants
         public static string SesMobile = "NininazShopUserMobile";
 
         //Api
-        //public static string ApiAddress = "http://arminapilegal.hamyaransystem.com:8686/";
-        public static string ApiAddress = "http://localhost:5000/";
+        public static string ApiAddress = "http://arminapilegal.hamyaransystem.com:8686/";
+       
+        //public static string ApiAddress = "http://localhost:5000/";
         public static string GetGoodGoal = "GetGoodGoal";
         public static string ApiKey = "76B0D844-440B-4597-A0DD-159C14746A88";
         public static string SendEmail = "SendEmail";
         public static string FinilizeInvoice = "FinalizeInvoice";
+        public static string FinilizeLocalInvoice = "FinalizeInvoiceSiteLocal";
         public static string NewOrganization = "SaveOrganizationSite";
+        public static string BestSellingGoods = "GetBestSellingGoods";
+        public static string InventoryQuantity = "GetInventoryQuantity";
+        public static string GetOrganizationSite = "GetOrganizationSite";
+        public static string EditOrganizationSite = "EditOrganization";
+        public static string GetParameters = "GetParameters";
         public static string GetOrganization = "api/Get";
         public static string JsonType = "application/json";
         public static string SecurityError = "خطای امنیتی";
+
+        public static string SmsApi = "http://smsg.ir/index2.php?goto=webservice/json&";
+
+        public static string GetPersianDate()
+        {
+            var persianDate = new PersianCalendar();
+            var date = DateTime.Now;
+            return
+                $"{persianDate.GetYear(date)}/{persianDate.GetMonth(date).ToString("D2")}/{persianDate.GetDayOfMonth(date).ToString("D2")}";
+        }
     }
 }

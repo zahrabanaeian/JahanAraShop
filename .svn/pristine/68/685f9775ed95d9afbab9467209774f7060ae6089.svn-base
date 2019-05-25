@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace JahanAraShop.Controllers
+{
+    public class ShopController : Controller
+    {
+        // GET: Shop
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public virtual ActionResult ShoppingCart()
+        {
+
+           
+
+            return View();
+        }
+
+    }
+}

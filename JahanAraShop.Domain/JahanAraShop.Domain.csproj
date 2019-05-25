@@ -52,6 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\AppConstants.cs" />
+    <Compile Include="DomainModel\spBestSaleGoods.cs" />
+    <Compile Include="DomainModel\tblAccountBranch.cs" />
+    <Compile Include="DomainModel\TblAtashTabletParameters.cs" />
+    <Compile Include="DomainModel\tblBankGatewayLog.cs" />
     <Compile Include="DomainModel\tblGood.cs" />
     <Compile Include="DomainModel\tblGoodGroup.cs" />
     <Compile Include="DomainModel\tblGoodSaleInfo.cs" />
@@ -61,14 +65,25 @@
     <Compile Include="DomainModel\tblSaleInvoice.cs" />
     <Compile Include="DomainModel\tblSaleInvoiceDetail.cs" />
     <Compile Include="DomainModel\tblSiteCounty.cs" />
+    <Compile Include="DomainModel\tblSiteDiscountCode.cs" />
     <Compile Include="DomainModel\tblSiteInformation.cs" />
     <Compile Include="DomainModel\tblSiteInformationType.cs" />
+    <Compile Include="DomainModel\tblSiteReview.cs" />
+    <Compile Include="DomainModel\tblSiteSlideShow.cs" />
     <Compile Include="DomainModel\tblSiteState.cs" />
+    <Compile Include="DomainModel\tblSiteWishList.cs" />
+    <Compile Include="DomainModel\vwGoodGroupSite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JahanAraShop.Resourecs\JahanAraShop.Resourecs.csproj">
+      <Project>{5F0B1DE4-BE73-4C0C-9FEE-1E613685B950}</Project>
+      <Name>JahanAraShop.Resourecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

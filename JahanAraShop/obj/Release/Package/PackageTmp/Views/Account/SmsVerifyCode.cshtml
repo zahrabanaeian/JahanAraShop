@@ -1,0 +1,34 @@
+﻿@model JahanAraShop.Models.VerifyCodeViewModel
+@{
+    ViewBag.Title = "SmsVerifyCode";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm(MVC.Account.SmsVerifyCode(), FormMethod.Post, new { role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <main class="main">
+        <div class="container">
+            <div class="row sec-padding">
+                <div class="col-md-12 col-sm-12">
+                    <div class="login-wrap">
+                        <div class="bm-30">
+                            @Html.ValidationSummary(true, "", new { @class = "blockdisp text-danger" })
+                            <span class="icon lh"><i class="icofont icofont-ui-unlock"></i></span>
+                            <h3>تایید کد اعتبار سنجی</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>کد اعتبارسنجی <span>*</span></label>
+                            @Html.TextBoxFor(m => m.Code, new { placeholder = " کد ", @class = "dir" })
+                            @Html.ValidationMessageFor(m => m.Code)
+                        </div>
+                        @Html.HiddenFor(m => m.PhoneNumber, new { Value=@ViewBag.phonenumber })
+                        <div class="form-group">
+                            <input type="submit" value="تایید">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+}
