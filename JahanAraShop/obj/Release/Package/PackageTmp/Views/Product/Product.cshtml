@@ -30,32 +30,44 @@
             <div class="col-md-6 col-sm-6 image pdt-single-slider dirfloat">
                 <div class="product-thumb-slider layout-btm-thumb">
                     <div class="slide-top  img-hover-zoom">
-
                         @foreach (var item in Model.Good)
                         {
+                            if (item.DiscountPercent != 0)
+                            {
+                                <div class='tag new'>
+                                    <strong>%@item.DiscountPercent.Value.ToString("#,##0")</strong>
+                                </div>
+                            }
+                            if (item.OutLet == true)
+                            {
+                                <div class='outlet'>
+                                    OutLet
+                                </div>
+                            }
+
                             <ul class="pdt-single-alt single-2">
                                 @if (System.IO.File.Exists(Server.MapPath(JahanAraShop.Application.Resources.Paths.ImageFolder + "Products/") + item.BarCode + ".png"))
                                 {
                                     <li>
                                         <figure>
-                                                <img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name">
+                                            <img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name">
                                         </figure>
                                     </li>
-                                    @*<li>
-                                            <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
-                                        </li>
-                                        <li>
-                                            <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
-                                        </li>
-                                        <li>
-                                            <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
-                                        </li>
-                                        <li>
-                                            <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
-                                        </li>
-                                        <li>
-                                            <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
-                                        </li>*@
+                                        @*<li>
+                                                <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
+                                            </li>
+                                            <li>
+                                                <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
+                                            </li>
+                                            <li>
+                                                <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
+                                            </li>
+                                            <li>
+                                                <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
+                                            </li>
+                                            <li>
+                                                <figure><img src="@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/@(item.BarCode).png" alt="@item.Name"></figure>
+                                            </li>*@
                                 }
                                 else
                                 {
@@ -121,11 +133,11 @@
                         <h3>@item.Name</h3>
                         <div class="price-wrap">
                             <div class="price">
-                                @if (item.DiscountPercent.Value != 0 || item.DiscountValue.Value!=0)
+                                @if (item.DiscountPercent.Value != 0 || item.DiscountValue.Value != 0)
                                 {
                                     <del>@item.RetailPrice.Value.ToString("#,##0")</del>
                                 }
-                                
+
                                 <ins>@price.ToString("#,##0") &nbsp; ریال </ins>
                             </div>
                             <div class="star-rate">
@@ -155,6 +167,13 @@
 
                                 }
                                 <br />
+
+                                @if (item.ExpireDate != null)
+                                {  <strong>تاریخ انقضا :</strong>
+                                <span>@item.ExpireDate.Value.ToString("yyyy/MM/dd")</span>
+
+                                }
+                                <br />
                                 @if (item.Name3 != null)
                                 {
                                     <strong>کد وزارت بهداشت :</strong>
@@ -163,10 +182,12 @@
 
                             </div>
                         </div>
+
+
                     <!--flex-->
 
                         <div class="btn-wrap bm-30">
-                            <a href="#" class="btn pri-bg" data-placement="top" id="btn-Cart" data-code="@item.BarCode"><i class="pe-7s-cart"></i> افزودن به سبد خرید</a>
+                            <a href="#" style="display:none;" class="btn pri-bg" data-placement="top" id="btn-Cart" data-code="@item.BarCode" data-quntity="@item.Remained.ToString("#,##0")"><i class="pe-7s-cart"></i> افزودن به سبد خرید</a>
                         </div>
 
                         <hr class="bm-30">
@@ -343,18 +364,19 @@
         //for firstload check if exsit or not
         $(document).ready(function () {
             GetWishList();
+            var hasquntity = jQuery("#quntity").data("quntity");
+            if (hasquntity == "True") {
+                jQuery("#btn-Cart").show();
+
+            }
             var code = jQuery("#btn-Cart").data("code");
             var json_str = Cookies.get(BasketCookie);
             var arr = JSON.parse(json_str);
-            var hasquntity = jQuery("#quntity").data("quntity");
-            if (hasquntity == "False") {
 
-                jQuery("#btn-Cart").text("موجود نیست");
-                jQuery("#btn-Cart").attr("disabled", 'disabled');
-            }
             var exist = false; //بررسی اینکه آیا عنصر موردنظر درآرایه وجود دارد یا نه
             for (var i = 0; i < arr.length; i++) {
-                if (arr[i].slice(0, arr.indexOf(':') - 1) == code) {
+                var temp = arr[i].split(':');
+                if (temp[0] == code) {
                     jQuery("#btn-Cart").attr("disabled", 'disabled');
                     break;
                 }
@@ -378,10 +400,11 @@
 
             var item = jQuery(this)[0];
             var code = jQuery(item).data("code");
-
+            var quntity = jQuery(item).data("quntity");
+            
             if (Cookies.get(BasketCookie) == undefined) {
                 //ایجاد یک ارایه جدید
-                var arr = [code + ':1'];
+                var arr = [code + ':1'+':'+quntity];
                 //اضافه کردن آرایه به یک کوکی جدید به شکل جیسون
                 Cookies.set(BasketCookie, JSON.stringify(arr));
                 //ست کردن تعداد محصولات انتخاب شده در سبد کالا
@@ -396,8 +419,10 @@
                 var json_str = Cookies.get(BasketCookie);
                 var arr = JSON.parse(json_str);
                 var exist = false; //بررسی اینکه آیا عنصر موردنظر درآرایه وجود دارد یا نه
-                for (var i = 0; i < arr.length; i++) {
-                    if (arr[i].slice(0, arr.indexOf(':') - 1) == code) {
+                for (var i = 0; i < arr.length; i++) {               
+                    var temp = arr[i].split(':');
+            
+                    if (temp[0] == code) {
                         jQuery("#btn-Cart").removeClass("actn add-to-cart");
                         //alert('کالا در سبد خرید شما قبلا اضافه شده است..');
                         exist = true;
@@ -407,7 +432,7 @@
                 if (!exist) {
 
                     //اضافه کردن عنصر جد ید ارایه ای که قبلا در کوکی ذخیره شده بود
-                    arr.push(code + ':1');
+                    arr.push(code + ':1' + ':' + quntity);
                     Cookies.set(BasketCookie, JSON.stringify(arr));
                     //اضافه کردن یک واحد به تعداد آبتم های داخل سبد کالا
                     var ct = parseInt(Cookies.get(BasketCountCooki)) + 1;

@@ -14,7 +14,8 @@
             </ul>
         </div>
     </div>
-    <!--breadcrumb-->
+ 
+       <!--breadcrumb-->
     <div class="checkout-info">
     </div>
     <!--checkout info-->
@@ -121,7 +122,8 @@
                     <h3>سفارش  شما</h3>
                     <table class="table_shop checkout_review">
                         <tbody>
-                            @{ decimal sum = 0; short Row = 1; }
+                            @{ decimal sumAfterDiscount = 0; short Row = 1;  decimal sumBeforeDiscount = 0;
+                                decimal sumDiscount = 0;}
                             @foreach (var item in Model.Items)
                             {
                                 <tr>
@@ -131,24 +133,31 @@
                                         @item.Price.Value.ToString("#,##0")
                                         <span class="portraitItme">ریال</span>
                                     </td>
-                                    @{ var total = item.Price.Value * item.Count;}
+                                    @{ var total = item.Price.Value * item.Count;
+                                        var totalAfterDiscount = (item.Price.Value * item.Count) - (item.DiscountValue.Value * item.Count);
+                                        var totalDiscount= (item.DiscountValue.Value * item.Count);
+                                        }
                                 </tr>
-                                            sum += total;
+                                            sumBeforeDiscount += total;
+                                            sumAfterDiscount += totalAfterDiscount;
+                                            sumDiscount += totalDiscount;
                                             Row++;
                                         }
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="2">جمع کل بدون تخفیف:</td>
-                                <td id="TotalPriceBeforeDis" data-sum="@sum">
-                                    @sum.ToString("#,##0")
+                                <td id="TotalPriceBeforeDis" data-sum="@sumBeforeDiscount">
+                                    @sumBeforeDiscount.ToString("#,##0")
                                     <span class="portraitItme">ریال</span>
                                 </td>
                             </tr>
                             <tr>
 
                                 <td colspan="2">مبلغ /درصد تخفیف:</td>
-                                <td id="Discount"></td>
+                                <td id="Discount">
+                                    @sumDiscount.ToString("#,##0") 
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="2">هزینه ارسال:</td>
@@ -158,8 +167,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2">جمع کل:</td>
-                                <td id="TotalPrice" data-sum="@sum">
-                                    @sum.ToString("#,##0")
+                                <td id="TotalPrice" data-sum="@sumAfterDiscount">
+                                    @sumAfterDiscount.ToString("#,##0")
                                     <span class="portraitItme" id="unit">ریال</span>
                                 </td>
                             </tr>
@@ -200,8 +209,10 @@
                     //totalvalue
                     var sum = parseInt($("#TotalPrice").data("sum"));
                     var sumtotal = parseInt(sum + PostPrice);
+                    var CoupnCode = $("#CoupnCode").val();
+                    var checkzero = sumtotal - discountvalue
+                    if (CoupnCode == "") { discountvalue = 0;}
                     var discountvalue = HasDiscount();
-                    var checkzero= sumtotal - discountvalue
                     if (discountvalue != 0 && checkzero > 0) sumtotal = sumtotal - discountvalue;
                     if (checkzero <= 0) sumtotal = parseInt(PostPrice);
 
@@ -218,7 +229,7 @@
                         discountpercent = discountpercent
                     }
                     ///////////////////
-                    var CoupnCode = $("#CoupnCode").val();
+                    
 
                     newinfo(PostPrice, sumtotal, discountvalue, discountpercent, CoupnCode);
                 }
@@ -275,13 +286,25 @@
 
                     //if is not mashhad
                 else {
+
                     PostPrice = 100000;
+
+                    //totalvalue
+                    var sum = parseInt($("#TotalPriceBeforeDis").data("sum"));
+                    //اگر خرید بالای 150 هزار تومان باشه هزینه پست رایگان است
+                    if (sum > 1500000) {
+                        PostPrice = 0;
+
+                    }
                     $('#PostCost').html(ReplaceNumberWithCommas(PostPrice));
                     //discountvalue
                     var discount = HasDiscount();
-                    //totalvalue
-                    var sum = parseInt($("#TotalPriceBeforeDis").data("sum"));
-                    //اگر مبلغ تخفیف بیشتر از مبلغ کل بود مبلغ صفر میشود اگر هزینه پست داشتع باشد باید 
+
+
+
+
+
+                    //اگر مبلغ تخفیف بیشتر از مبلغ کل بود مبلغ صفر میشود اگر هزینه پست داشتع باشد باید
                     //جمع کل=هزینه پست شود
                     if ((sum- discount) <= 0 && discount != 0)
                     {
@@ -295,12 +318,11 @@
                     $('#TotalPrice').html(ReplaceNumberWithCommas(sumtotal) + "  ریال ");
 
 
-
                 }
             });
         });
 
-   
+
         //ایا تخفیف دارد فیلد تخفیف یا نه؟
         function HasDiscount() {
             var discount = $("#Discount").html();
@@ -383,6 +405,7 @@
         }
         function checkCode() {
             var CoupnCode = $("#CoupnCode").val();
+           
 
             $.ajax({
                 type: 'Post',
@@ -404,7 +427,15 @@
                     }
                     //valid code
                     if (data.res == 1) {
+                        var dis = $("#Discount").html();
+                        if (dis != 0)
+                        {
+                            $("#result").text("کالای انتخاب شده دارای درصد تخفیف می باشد ونمی توانید از کد تخفیف استفاده کنید.");
+                           
+                            $("#CoupnCode").val("");
+                            return;
 
+                        }
                         $("#result").text("");
                         //discountpercent code
                         if (data.DisValue == 0) {
@@ -424,6 +455,6 @@
 
             });
         }
-      
+
     </script>
 }

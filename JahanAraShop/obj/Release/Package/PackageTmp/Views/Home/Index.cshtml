@@ -6,7 +6,8 @@
 
 <main class="main">
     <!--header-->
-    <div class="hero-banner">
+    <div class="hero-banner" style="margin-top:0px;">
+
         <div class="slider-wrapper">
             <div class="slider">
                 <h1 hidden>آرایشی جهان آرا</h1>
@@ -75,7 +76,7 @@
                                 @*<span>BOURJOIS</span>
                                     collection*@
                             </h2>
-                            <img src="~/Content/images/home/col3.png" alt="بیادرما" />
+                            <img src="~/Content/images/home/col3.jpg" alt="بیادرما" />
                         </figure>
                     </div>
                     <!--first-->
@@ -86,7 +87,7 @@
                                 @*<span>BABAEIA</span>
                                     collection*@
                             </h2>
-                            <img src="~/Content/images/home/col2.png" alt="آنی" />
+                            <img src="~/Content/images/home/col2.jpg" alt="آنی" />
                         </figure>
                     </div>
                     <!--second-->
@@ -100,7 +101,7 @@
                                 @*<span>ISADORA</span>
                                     collection*@
                             </h2>
-                            <img src="~/Content/images/home/col1.png" alt="آدیداس" />
+                            <img src="~/Content/images/home/col1.jpg" alt="آدیداس" />
                         </figure>
                     </div>
                     <!--third-->
@@ -111,7 +112,7 @@
                                 @*<span>MARCJOSEPH</span>*@
 
                             </h2>
-                            <img src="~/Content/images/home/col4.png" alt="نوبا" />
+                            <img src="~/Content/images/home/col4.jpg" alt="نوبا" />
 
                         </figure>
                     </div>
@@ -125,14 +126,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12 text-center">
-              @{
-                if (Model.NewestGoods.Count != 0)
-                  {
-                    <div class="title mid-sep">
-                        <h2>جدیدترین کالاها</h2>
-                    </div>
-                       }
-                     }
+                    @{
+                        if (Model.NewestGoods.Count != 0)
+                        {
+                            <div class="title mid-sep">
+                                <h2>جدیدترین کالاها</h2>
+                            </div>
+                        }
+                    }
                 </div>
                 <!--title bar-->
                 <div class="col-md-12 col-sm-12 col-xs-12 product-wrap dir">
@@ -263,7 +264,7 @@
             </div>
         </div>
     </div>
-    
+
     <!--tranding-->
 
     <div class="news blog-holder modern bm-50">
@@ -272,27 +273,27 @@
             <div class="row dir">
                 @foreach (var item in Model.TblSiteInformations)
                 {
-                    <div class="col-md-6 col-sm-6 col-xs-12 dirfloat">
-                        <div class="blog-wrap">
-                            <figure class="img-animi">
-                                <a href="@Url.Action(MVC.News.Index())">
-                                    <img src="~/Content/images/News/@item.LargePicture" alt="خبرهای جهان آرا" />
-                                </a>
-                            </figure>
-                            <div class="post-wrap">
-                                <div class="entry-info">
-                                    <span class="entry-date pri-bg">@item.FarsiCreateDate</span>
-                                    <span class="comment-count"><a href="#"><i class="fa fa-comments"></i> 5</a></span>
-                                </div>
-                                <h5 class="post-title">
-                                    <a href="@Url.Action(MVC.News.Index())">@item.FarsiTitle</a>
-                                </h5>
-                                <p>
-                                    @item.FarsiSmallDescription
-                                </p>
+                <div class="col-md-6 col-sm-6 col-xs-12 dirfloat">
+                    <div class="blog-wrap">
+                        <figure class="img-animi">
+                            <a href="@Url.Action(MVC.News.Index())">
+                                <img src="~/Content/images/News/@item.LargePicture" alt="خبرهای جهان آرا" />
+                            </a>
+                        </figure>
+                        <div class="post-wrap">
+                            <div class="entry-info">
+                                <span class="entry-date pri-bg">@item.FarsiCreateDate</span>
+                                <span class="comment-count"><a href="#"><i class="fa fa-comments"></i> 5</a></span>
                             </div>
+                            <h5 class="post-title">
+                                <a href="@Url.Action(MVC.News.Index())">@item.FarsiTitle</a>
+                            </h5>
+                            <p>
+                                @item.FarsiSmallDescription
+                            </p>
                         </div>
                     </div>
+                </div>
                 }
             </div>
         </div>
@@ -321,28 +322,31 @@
     <a href="#" class="back-to-top"><i class="fa fa-long-arrow-up"></i></a>
 </main>
 <!--main-->
-@*<div class="modal fade" id="newsletter">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <figure>
-                        <img src="~/Content/images/newsletter-bg.jpg" alt="">
-                    </figure>
-                    <div class="content-hold">
-                        <div class="wrap">
-                            <h2 class="text-uppercase text-white">SIGN UP AND <br> CONNECT TO neostore!</h2>
-                            <h6 class="text-white bm-30">Sign up for Exclusive Updates, New Arrivals and and Discount offers.</h6>
+<div class="modal fade" id="newsletter">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <figure>
+                    <img src="~/Content/images/newsletter-bg.jpg" alt="">
+                </figure>
+                <div class="content-hold">
+                    <div class="wrap">
+                        <h2 class="text-uppercase text-white">محصولات با تاریخ انقضای پایین</h2>
+                        <h6 class="text-white bm-30">  تا  50%     تخفیف
+                        </h6>
+                        @using (Html.BeginForm("OutLet", "Home", FormMethod.Post, new { id = "Details", @class = "checkout sec-mar" }))
+                        {
                             <form>
                                 <div class="form-group bm-0">
-                                    <input type="text" placeholder="Email address">
-                                    <input type="submit" value="Submit">
+                                    <input type="submit" value="مشاهده">
                                 </div>
                             </form>
-                        </div>
+                        }
                     </div>
                 </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-    </div>*@
+        <!-- /.modal-content -->
+    </div>
+</div>
 <!-- /.modal -->

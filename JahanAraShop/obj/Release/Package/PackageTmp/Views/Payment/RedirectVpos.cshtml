@@ -35,15 +35,22 @@
                             <th class="pdt_name">محصولات</th>
                             <th class="pdt_price">قیمت واحد</th>
                             <th class="pdt_qty">تعداد</th>
+                            <th class="pdt_qty" style="padding-left:46px;">تخفیف</th>
                             <th class="pdt_subtotal">قیمت کل</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @{ decimal sum = 0; short Row = 1; decimal total = 0; }
+                        @{ decimal sum = 0; short Row = 1; decimal total = 0; decimal totaldisRow = 0;
+                            decimal sumDiscount = 0; }
                         @foreach (var item in Model.Items)
                         {
-                            { total = item.Price.Value * item.Count; }
+                            {
+                                totaldisRow = item.DiscountValue.Value * item.Count;
+                                total = item.Price.Value * item.Count- totaldisRow;
+               
+
+                            }
                             <tr class="crt_itm">
                                 <td data-title="ردیف">@Row</td>
                                 <td data-title="محصولات">@item.Name</td>
@@ -53,6 +60,7 @@
                                     <span class="portraitItme">ریال</span>
                                 </td>
                                 <td data-title="تعداد">@item.Count</td>
+                                <td data-title="تخفیف">@totaldisRow.ToString("#,##0")</td>
                                 <td class="pdt_price" data-title="قیمت کل">
                                     @total.ToString("#,##0")
                                     <span class="portraitItme">ریال</span>
@@ -60,6 +68,7 @@
 
                             </tr>
                             sum += total;
+                            sumDiscount += totaldisRow;
                             Row++;
                         }
                     </tbody>
@@ -78,14 +87,17 @@
 
                             if (sumTotal <= 0) { sumTotal = 0; }
                             //var discountval =Math.Round( sum * Model.DiscountPrecent / 100);
-                            var discountval = Model.DiscountValue;
+                            if (Model.DiscountValue != 0) {
+                                sumDiscount = Model.DiscountValue;
+                            }
+                           
 
 
                         }
                         <tr>
                             <td>تخفیف</td>
                             <td>
-                                @discountval.ToString("#,##0")
+                                @sumDiscount.ToString("#,##0")
                                 <span class="portraitItme">ریال</span>
                             </td>
 
@@ -101,6 +113,7 @@
                         <tr>
                             <td>جمع کل</td>
                             <td id="TotalPriceAtferDiscount" data-sum="@sumTotal">
+                               
                                 @(sumTotal.ToString("#,##0"))
                                 <span class="portraitItme">ریال</span>
                             </td>
@@ -138,8 +151,8 @@
             url: "/Payment/SaveLocalInvoice",
             success: function (data) {
                 if (data == true) {
-                    $("#formBank").submit(); 
-                    
+                    $("#formBank").submit();
+
                 }
 
                 else {

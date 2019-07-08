@@ -5408,7 +5408,7 @@ h3.faq-cat {
     }
 
 #newsletter .form-group {
-    display: flex;
+    /*display: flex;*/
     align-items: center;
     justify-content: space-between;
     margin: 0;
@@ -6244,6 +6244,35 @@ span.pdt_title {
     color:red;
     float:right;
     text-align:center;
+
+        
+}
+.outlet{
+    position: absolute;
+    z-index: 3;
+    width: 136px;
+    line-height: 2.2;
+    text-align: center;
+    top: 27px;
+    right: -30px; 
+    color: #fff;
+    font-size: 12px;
+    text-transform: uppercase;
+    background:#d00b0b;
+    transform: rotate(46deg);
+
+}
+.quntity{
+    position: absolute;
+    z-index: 3;
+    width: 136px;
+    line-height: 2.2;
+    text-align: center;
+    top: 18px;
+    right: 55px; 
+    color: #d60644;
+    font-size: 1.4em;
+    text-transform: uppercase;
 
 
 }

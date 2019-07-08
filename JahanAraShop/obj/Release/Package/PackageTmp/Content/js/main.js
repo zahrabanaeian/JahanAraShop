@@ -136,6 +136,7 @@
         displayModal: function() {
             if (this.bodyEl.has('#newsletter')) {
                 $('#newsletter').modal('show');
+                $(".modal-backdrop").detach();
             }
         },
 

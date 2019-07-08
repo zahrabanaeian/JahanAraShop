@@ -1,0 +1,221 @@
+﻿@model List<JahanAraShop.Domain.DomainModel.tblSaleInvoice>
+@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="dash-pg-header pg-header style2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 flx-element wrap">
+                <div class="left">
+                    <h4 class="bm-0 text-white">حساب کاربری شما</h4>
+                </div>
+                <!--left-->
+                <ul class="breadcrumb">
+                    <li class="active">حساب کاربری</li>
+                    <li><a href="@Url.Action(MVC.Home.Index())">صفحه اصلی</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{var phone = ""; }
+@{if (ViewBag.cellphone != null)
+    {
+
+        phone = ViewBag.cellphone;
+    }
+}
+<main class="dash-content bg-soft-gray sec-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <nav class="account-nav">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <span class="icon radius-circle"><i class="pe-7s-keypad"></i></span> داشبورد
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="@Url.Action(MVC.User.Orders(phone))">
+                                <span class="icon radius-circle"><i class="pe-7s-cart"></i></span> سفارشات شما
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="@Url.Action(MVC.Account.ChangePassword(phone))">
+                                <span class="icon radius-circle"><i class="pe-7s-map-marker"></i></span> تغییر پسورد
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action(MVC.User.Index(phone))">
+                                <span class="icon radius-circle"><i class="pe-7s-user"></i></span> پروفایل
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action(MVC.User.WishList(phone))">
+                                <span class="icon radius-circle"><i class="fa fa-star-o"></i></span> علاقه مندی ها
+                            </a>
+                        </li>
+                        <li>
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <a href="javascript:document.getElementById('logoutForm').submit()">
+                                    <span class="icon radius-circle"><i class="pe-7s-plug"></i></span> خروج
+                                </a>
+                            }
+                        </li>
+                    </ul>
+                </nav>
+                <div class="account-content dir">
+                    @if (Model.Count != 0)
+                    {
+                        <table class="shop_table account-orders-table">
+                            <thead>
+                                <tr>
+                                    <th><span class="nobr">ردیف</span></th>
+                                    <th><span class="nobr">شماره سفارش</span></th>
+                                    <th><span class="nobr">تاریخ خرید</span></th>
+                                    <th><span class="nobr">شماره پیگیری</span></th>
+                                    <th><span class="nobr">مبلغ کل(ریال)</span></th>
+                                    <th><span class="nobr">جزئیات فاکتور</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int Row = 0;}
+                                @foreach (var item in Model)
+                                {
+                                    Row++;
+                                    <tr class="order">
+                                        <td class="" data-title="ردیف">
+                                            @Row
+                                        </td>
+                                        <td data-title="شماره سفارش">
+                                            @item.Id
+                                        </td>
+                                        <td data-title="تاریخ">
+                                            <time datetime="2018-04-17T17:29:30+00:00">@item.FarsiCreateDate</time>
+                                        </td>
+                                        <td data-title="شماره پیگیری">
+                                            @item.ManualCode
+                                        </td>
+                                        <td data-title="جمع کل">
+                                            <span> @item.TotalValue.ToString("#,##0")</span>
+                                        </td>
+                                        <td data-title="جزئیات">
+                                            <a onclick="viewdetail(@item.Id)" class="btn btn-default view"> مشاهده</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                                    }
+                                    else
+                                    {
+
+
+                                        
+                                            <div class="error" style="text-align:center;">نتيجه اي يافت نشد!</div>
+                                        
+                                    }
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+<!-- Modal -->
+<div class="modal fade" id="Added" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content dir">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">جزییات</h4>
+            </div>
+            <div class="modal-body" id="saledetail">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function viewdetail(id) {
+
+        var saleid = id;
+        $.ajax({
+            type: 'Post',
+            url: '/User/OrdersDetail/',
+            data: { "saleid": saleid },
+            dataType: "json",
+            success: function (data) {
+
+                if (data.isRedirect) {
+
+                    window.location.href = data.redirectUrl;
+                }
+                else {
+                    if (data.result) {
+
+                        $("#Added").modal();
+
+
+                    }
+                    if (!data.result) {
+                        var Rownumber = 1;
+                        var texthtml = "";
+                        texthtml = "<table class='shop_table account-orders-table'>"
+                        texthtml += "<thead> <tr> <th><span class='nobr'>ردیف</span></th> <th><span class='nobr'>نام کالا</span></th><th><span class='nobr'>تعداد</span></th><th><span class='nobr'>مبلغ</span></th><th><span class='nobr'>مبلغ تخفیف</span></th><th><span class='nobr'>درصد تخفیف</span></th></tr> </thead>"
+
+                        texthtml += "<tbody>"
+
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].DiscountValue == null) data[i].DiscountValue = 0;
+                            if (data[i].DiscountPercent == null) data[i].DiscountPercent = 0;
+                            texthtml += "<tr class='order'><td data-title='ردیف'>" + Rownumber + "</td><td data-title='نام کالا'>" + data[i].Name + "</td>"
+                            texthtml += "<td data-title='تعداد'>" + data[i].Qty + "</td>"
+                            texthtml += "<td data-title='فی خرید'>" + ReplaceNumberWithCommas(data[i].RetailPrice) + " </td>"
+                            texthtml += "<td data-title='مبلغ خرید'> <span> " + ReplaceNumberWithCommas(data[i].DiscountValue) + "</span></td>"
+                            texthtml += "<td data-title='درصد تخفیف'> <span> " + data[i].DiscountPercent + "</span> </td> </tr>"
+                            Rownumber++;
+                        }
+
+                        texthtml += " </tbody>"
+                        texthtml += "</table>"
+                        $("#saledetail").html(texthtml);
+                        $("#Added").modal();
+                        $(".modal-backdrop").detach();
+
+                    }
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('error: ' + textStatus + ': ' + errorThrown);
+            }
+        });
+
+    }
+    function ReplaceNumberWithCommas(yourNumber) {
+        if (yourNumber != null) {
+            var n = yourNumber.toString().split(".");
+            n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return n.join(".");
+        }
+        else {
+            return 0;
+        }
+    }
+
+</script>

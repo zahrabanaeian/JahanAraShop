@@ -29,14 +29,20 @@
                                 <th class="pdt_name">محصولات</th>
                                 <th class="pdt_price">قیمت واحد</th>
                                 <th class="pdt_qty">تعداد</th>
+                                <th class="pdt_qty">تخفیف</th>
                                 <th class="pdt_subtotal">قیمت کل</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @{decimal sum = 0;}
+                            @{
+                                decimal SumBeforeDiscount = 0;
+                                decimal SumAfterDiscount = 0;
+                                decimal SumDiscount = 0;
+
+                                }
                             @foreach (var item in Model.Items)
                             {
-                                <tr class="crt_itm">
+                                <tr class="crt_itm" data-quantity="@item.Qauntity">
                                     <td class="pdt_remove removeItem" data-title="حذف"> <a href="#"><i class="pe-7s-close"></i></a> </td>
                                     <td class="pdt_name" data-title="نام محصول">
                                         @if (System.IO.File.Exists(Server.MapPath(JahanAraShop.Application.Resources.Paths.ImageFolder + "Products" + "/") + (item.Barcode) + ".png"))
@@ -54,30 +60,35 @@
                                         }
                                         <span class="pdt_title">@item.Name</span>
                                     </td>
-                                    @{ var total = item.Price.Value * item.Count;}
+                                    @{
+                                        var totalBeforeDiscount = item.Price.Value * item.Count;
+                                        var totalDiscountValue = item.DiscountValue.Value * item.Count;
+                                        var totalafterDiscountRow = (item.Price.Value * item.Count) - (item.DiscountValue.Value * item.Count);
+                                     }
                                     <td class="pdt_price" data-title="قیمت واحد">@item.Price.Value.ToString("#,##0")</td>
-                                    <td class="pdt_qty itemDesc" data-title="تعداد" data-total="@(Convert.ToDouble(total))" data-price="@(Convert.ToDouble(item.Price.Value))" data-count="@(item.Count)" data-code="@(item.Barcode)">
-                                        <a href="javascript:void(0)" class="ArrowDown fa fa-caret-down"></a>
+                                    <td class="pdt_qty itemDesc" data-title="تعداد" data-total="@(Convert.ToDouble(totalBeforeDiscount))" data-price="@(Convert.ToDouble(item.Price.Value))" data-count="@(item.Count)" data-code="@(item.Barcode)" data-discountvalue="@item.DiscountValue">
+                                        <a href="javascript:void(0)" class="ArrowDown fa fa-caret-down" data-quantity="@item.Qauntity"></a>
                                         <span style="color:#2a2929;" class="Count">
                                             &nbsp;&nbsp; @item.Count  &nbsp;&nbsp;
                                         </span>
-                                        <a href="javascript:void(0)" class="ArrowUp fa fa-caret-up"></a>
+                                        <a href="javascript:void(0)" class="ArrowUp fa fa-caret-up" data-quantity="@item.Qauntity"></a>
                                     </td>
-
-                                    <td class="pdt_subtotal sumTotal" data-title="جمع کل" data-total="@(Convert.ToDouble(total))">@total.ToString("#,##0") ریال</td>
+                                    <td class="pdt_qty discount" data-title="تخفیف"  data-discountvalue="@item.DiscountValue">
+                                      @totalDiscountValue.ToString("#,##0")
+                                    </td>
+                                    <td class="pdt_subtotal sumTotal" data-title="جمع کل" data-totaldiscount="@(Convert.ToDouble(totalDiscountValue))" data-totalbefore="@(Convert.ToDouble(totalBeforeDiscount))" data-total="@(Convert.ToDouble(totalafterDiscountRow))">@totalafterDiscountRow.ToString("#,##0") ریال</td>
                                 </tr>
-                                            sum += total;
+                                            SumBeforeDiscount += totalBeforeDiscount;
+                                            SumDiscount += totalDiscountValue;
+                                            SumAfterDiscount += totalafterDiscountRow;
+
+
                                         }
                             <!--single item-->
 
                             <tr>
                                 <td colspan="5" class="cupon-action">
                                     <div class="flx-element">
-                                        @*<div class="coupon">
-                                                <input type="text" placeholder="Coupon Code">
-                                                <input type="submit" value="Apply Coupon">
-                                            </div>*@
-                                        <!--coupon-->
                                         <a class="btn btn_cart" href='@Url.Action(MVC.Home.Index())'>بازگشت به صفحه اصلی</a>
                                     </div>
                                 </td>
@@ -95,18 +106,22 @@
                             <tr>
                                 <td>جمع کل بدون تخفیف</td>
                                 <td id="TotalPrice">
-                                    @(sum.ToString("#,##0"))
+                                    @(SumBeforeDiscount.ToString("#,##0"))
                                     <span class="portraitItme">ریال</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>تخفیف</td>
-                                <td>0</td>
+                                <td id="TotalDiscountValue">
+                                    @(SumDiscount.ToString("#,##0"))
+                                    <span class="portraitItme">ریال</span>
+                                </td>
+                          
                             </tr>
                             <tr>
                                 <td>جمع کل</td>
                                 <td id="TotalPriceAtferDiscount">
-                                    @(sum.ToString("#,##0"))
+                                    @(SumAfterDiscount.ToString("#,##0"))
                                     <span class="portraitItme">ریال</span>
                                 </td>
 
@@ -120,6 +135,20 @@
             <div class="dir" id="dialog"></div>
         </form>
     </div>
+    <div class="modal fade" id="qaunity" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content dir">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">سبد خرید</h4>
+                </div>
+                <div class="modal-body">
+                    <p>این تعداد بیش از حد موجودی است.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 @section Scripts {
     @System.Web.Optimization.Scripts.Render("~/Content/js/js.cookie.js")
@@ -131,12 +160,17 @@
 
             jQuery(".ArrowUp").click(function () {
                 var item = jQuery(this)[0];
-                SubPlus(item, 1);
+                var mes = SubPlus(item, 1);
+                if (mes == 1) {
+                    $("#qaunity").modal();
+                    $(".modal-backdrop").detach();
+                }
             });
 
             jQuery(".ArrowDown").click(function () {
                 var item = jQuery(this)[0];
-                SubPlus(item, -1);
+               SubPlus(item, -1);
+               
             });
 
             jQuery(".removeItem").click(function () {
@@ -148,14 +182,16 @@
                         $radif.text(parseInt($radif.text()) - 1);
                     });
 
+
                     var $item = jQuery($this).closest("tr").children('.itemDesc');
                     var cod = $item.data("code");
                     var count = parseInt($item.data("count"));
                     var json_str = Cookies.get(BasketCookie);
-                    var arr = JSON.parse(json_str);
+                    var arr = JSON.parse(json_str);                    
                     var newArr = [];
                     for (var i = 0; i < arr.length; i++) {
-                        if (arr[i].slice(0, arr.indexOf(':') - 1) != cod)
+                      var temp= arr[i].split(':');
+                      if (temp[0] != cod)
                             newArr.push(arr[i]);
                     }
                     Cookies.set(BasketCookie, JSON.stringify(newArr));
@@ -167,14 +203,21 @@
 
                     $row.remove();//حذف آیتم
 
-
+                 
                     //محاسبه مجموع خرید
                     var $total = jQuery('#TotalPrice');
                     var totalSum = 0;
                     jQuery('.sumTotal').each(function () {
-                        totalSum += parseFloat(jQuery(this).data("total"));
+                        totalSum += parseFloat(jQuery(this).data("totalbefore"));
                     });
-                    $total.html(ReplaceNumberWithCommas(totalSum + "  ریال "));
+                    $total.html(ReplaceNumberWithCommas(totalSum) + "  ریال ");
+                    //محاسبه مجموع تخفیف
+                    var $totalDiscount = jQuery('#TotalDiscountValue');
+                    var totalSumDisocuntValue = 0;
+                    jQuery('.sumTotal').each(function () {
+                        totalSumDisocuntValue += (parseFloat(jQuery(this).data("totaldiscount")));
+                    });
+                    $totalDiscount.html(ReplaceNumberWithCommas(totalSumDisocuntValue) + "  ریال ");
 
                     var $TotalAfterDiscount = jQuery('#TotalPriceAtferDiscount');
                     var totalAfterDiscountSum = 0;
@@ -198,25 +241,41 @@
 
         function SubPlus(item, oprator) {
             var $item = jQuery(item);
+            var quntity= $item.data("quantity");
             var $td = $item.closest("td");
             var code = $td.data("code");
             var count = parseInt($td.data("count")) + oprator;
-            if (count <= 0) return;
+            if (count <= 0 || count>quntity) return 1;
             var price = parseFloat($td.data("price"));
             var totalRowPrice = price * count;
-            Plus(code + ':' + (count - oprator), code + ':' + count);
+            //disocunt
+            var discount = parseFloat($td.data("discountvalue"));
+            var totalRowDiscountValue = count * discount;
+            var totalpriceAfterDiscountValue = totalRowPrice - totalRowDiscountValue;
+
+            Plus(code + ':' + (count - oprator) + ':' + quntity, code + ':' + count + ':' + quntity);
             //ثبت تعداد جدید در قسمت نمایش تعداد
             $td.data("count", count).children(".Count").html("&nbsp;&nbsp;&nbsp;" + count + "&nbsp;&nbsp;&nbsp;");
-            $td.next().html(ReplaceNumberWithCommas(totalRowPrice) + "  ریال ")
-            .data("total", totalRowPrice);
-            //محاسبه مجموع خرید
+            $td.next().next().html(ReplaceNumberWithCommas(totalpriceAfterDiscountValue) + "  ریال ").data("total", totalpriceAfterDiscountValue);
+            $td.next().next().data("totalbefore", totalRowPrice);
+            $td.next().next().data("totaldiscount", totalRowDiscountValue);
+            $td.next().html(ReplaceNumberWithCommas(totalRowDiscountValue)).data("total", totalRowDiscountValue);
+            //محاسبه مجموع خرید کل قبل از تخفیف 
             var $total = jQuery('#TotalPrice');
             var totalSum = 0;
+            var totalSumDisocuntValue = 0;
             jQuery('.sumTotal').each(function () {
-                totalSum += parseFloat(jQuery(this).data("total"));
+                totalSum += parseFloat(jQuery(this).data("totalbefore"));
             });
             $total.html(ReplaceNumberWithCommas(totalSum) + "  ریال ");
 
+            //محاسبه مجموع تخفیف
+            var $totalDiscount = jQuery('#TotalDiscountValue');
+            jQuery('.sumTotal').each(function () {
+                totalSumDisocuntValue += (parseFloat(jQuery(this).data("totaldiscount")));
+            });
+            $totalDiscount.html(ReplaceNumberWithCommas(totalSumDisocuntValue) + "  ریال ");
+            
 
             var $TotalAfterDiscount = jQuery('#TotalPriceAtferDiscount');
             var totalAfterDiscountSum = 0;

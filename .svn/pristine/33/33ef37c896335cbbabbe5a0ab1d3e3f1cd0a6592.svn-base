@@ -1,0 +1,42 @@
+﻿@model JahanAraShop.Areas.Admin.Models.LoginViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<body class="login_page" >
+    <div class="container-fluid">
+        <div class="login-wrapper row">
+           
+                <div id="login" class="login loginpage col-lg-offset-4 col-md-offset-3 col-sm-offset-3 col-xs-offset-0 col-xs-12 col-sm-6 col-lg-4 dr">
+                    <h1>مدیریت سایت</h1>
+                    @using (Html.BeginForm(MVC.Admin.Signin.Index(), FormMethod.Post, new { role = "form" }))
+                    {    @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "blockdisp text-danger" })
+                        <p>
+                            <label for="user_login">
+                                @Html.LabelFor(m => m.PhoneNumber)<br />
+                                @Html.TextBoxFor(m => m.PhoneNumber)
+                                @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "blockdisp text-danger" })
+                            </label>
+                        </p>
+                        <p>
+                            <label for="user_login">
+                                @Html.LabelFor(m => m.Password)
+                                <br />
+                                @Html.PasswordFor(m => m.Password, new { @class = "input" })
+
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "blockdisp text-danger" })
+                            </label>
+                        </p>
+                        <p class="submit">
+                            <input type="submit" name="wp-submit" id="wp-submit" class="btn btn-accent btn-block" value="ورود" />
+                        </p>
+
+                    }
+
+                </div>
+          
+        </div>
+    </div>
+</body>

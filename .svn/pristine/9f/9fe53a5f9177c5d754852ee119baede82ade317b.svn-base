@@ -1,0 +1,62 @@
+﻿@model JahanAraShop.Models.RegisterViewModel
+@{
+    ViewBag.Title = "ثبت نام";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div id="wrap">
+      @using (Html.BeginForm(MVC.Account.Register(), FormMethod.Post, new { role = "form" }))
+       {
+          @Html.AntiForgeryToken()
+         <main class="main">
+            <div class="container">  
+                    <div class="col-md-12 col-sm-12">
+                        <div class="login-wrap">
+                            <div class="bm-30">
+                                <span class="icon lh"><i class="icofont icofont-ui-lock"></i></span>
+                                <h3>ایجاد حساب کاربری</h3>
+                                @Html.ValidationSummary(true, "", new { @class = "blockdisp text-danger dir" })
+                            </div>
+                            <form>
+                                <div class="form-group">
+                                    <label>نام <span>*</span></label>
+                                    @Html.TextBoxFor(m => m.FirstName, new { placeholder = "نام ", @class = "dir" })
+                                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "blockdisp text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label>نام خانوادگی <span>*</span></label>
+                                    @Html.TextBoxFor(m => m.Name, new { placeholder = " نام خانوادگی", @class = "dir" })
+                                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "blockdisp text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label>نام کاربری <span>*</span></label>
+                                    @Html.TextBoxFor(m => m.PhoneNumber,new { placeholder = " تلفن همراه ",@class= "dir" })
+                                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "blockdisp text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label>پسورد <span>*</span></label>
+                                    @Html.PasswordFor(m => m.Password, new { placeholder = " *************", @class = "dir" })
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "blockdisp text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <label>تکرار پسورد <span>*</span></label>
+                                    @Html.PasswordFor(m => m.ConfirmPassword, new { placeholder = " *************", @class = "dir" })
+                                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "blockdisp text-danger" })
+
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="ثبت نام در جهان آرا">
+                                </div>
+                                قبلا در جهان آرا ثبت نام کرده اید؟ <a href="@Url.Action(MVC.Account.Login())"><strong>وارد شوید</strong></a>
+                            </form>
+                        </div>
+                    </div>
+                    
+             
+            </div>
+        </main>
+}
+        <!--main-->
+    
+    </div>
+    <a href="#" class="back-to-top"><i class="fa fa-long-arrow-up"></i></a>

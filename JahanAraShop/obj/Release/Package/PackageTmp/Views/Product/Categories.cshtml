@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div id="wrap"> 
+<div id="wrap">
     <div class="pg-header jarallax overlay parlx-pad sec-mar">
         <img class="jarallax-img" src="~/Content/images/page-title.jpg" alt="">
         <div class="container">
@@ -29,7 +29,7 @@
     <main class="main">
         <div class="container">
             <div class="row sec-mar">
-                <div class="col-md-3 col-sm-3 sidebar dirfloat" >
+                <div class="col-md-3 col-sm-3 sidebar dirfloat">
                     <div class="sidebar_widget">
                         <div class="widget_title"><h4 class="dir">برند</h4></div>
                         <input style="margin-bottom:20px;" id="myInput" class="search dir" type="search" placeholder="جستجو براساس برند" />
@@ -51,16 +51,16 @@
                     <!--size filter-->
                     <div class="sidebar_widget">
                         <figure class="img-animi">
-                            <a href="#"> 
+                            <a href="#">
                                 <img src="~/Content/images/sidebar/sidebar.jpg" alt="" />
                             </a>
                         </figure>
                     </div>
                 </div>
                 <!--sidebar-->
-                <div class="col-md-9 col-sm-9 left-blk dirfloat" >
-                      @*<a href="#quick-view-popup"  class='actn' data-toggle='tooltip' data-placement='top' data-rel='quickview-popup' title='Quick View'  >Click</a>*@
-                    
+                <div class="col-md-9 col-sm-9 left-blk dirfloat">
+                    @*<a href="#quick-view-popup"  class='actn' data-toggle='tooltip' data-placement='top' data-rel='quickview-popup' title='Quick View'  >Click</a>*@
+
                     @*<a href="#quick-view-popup"  class='actn' data-toggle='tooltip' data-placement='top' data-rel='quickview-popup' title='Quick View'  >Click</a>*@
                     <div id="nothing" class="dir" style="display:none;"><h2>محصولی برای نمایش وجود ندارد لطفا گروه کالایی دیگری را انتخاب کنید</h2></div>
                     <div class="product-wrap product-listing dir">
@@ -82,7 +82,7 @@
                     </div>
                     <!--product wrap-->
 
-                    <div class="bottom-sorting" >
+                    <div class="bottom-sorting">
                         <div class="result-count"></div>
                         <!--result count-->
                         <div class="pagination dir">
@@ -94,14 +94,14 @@
                     <!--bottom sorting-->
                 </div>
                 <!--left-->
-              
+
             </div>
         </div>
     </main>
 </div>
 
 
-<div  id="quick-view-popup" data-toggle="modal" data-target="quick-view-popup">  
+<div id="quick-view-popup" data-toggle="modal" data-target="quick-view-popup">
     <div class="qv-wrap">
         <div class="row product">
             <div class="col-md-6 col-sm-6 image pdt-single-slider">
@@ -111,14 +111,14 @@
                             <li>
                                 <figure><img src="~/Content/images/pdt-single-slide1.jpg" alt=""></figure>
                             </li>
-                          
+
                         </ul>
                     </div>
                     <ul class="qv-single-thumb thumb-2">
                         <li>
                             <figure><img src="~/Content/images/pdt-single-slide6.jpg" alt=""></figure>
                         </li>
-                       
+
                     </ul>
                 </div>
             </div>
@@ -256,15 +256,15 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
-       
-     
+
+
 
     });
     //در صورتی که روی یک دکمه کلید شد
-    function addtocart(code) {
+    function addtocart(code,quantity) {
         if (Cookies.get(BasketCookie) == undefined) {
             //ایجاد یک ارایه جدید
-            var arr = [code + ':1'];
+            var arr = [code + ':1'+':'+quantity];
             //اضافه کردن آرایه به یک کوکی جدید به شکل جیسون
             Cookies.set(BasketCookie, JSON.stringify(arr));
             //ست کردن تعداد محصولات انتخاب شده در سبد کالا
@@ -280,7 +280,8 @@
             var arr = JSON.parse(json_str);
             var exist = false; //بررسی اینکه آیا عنصر موردنظر درآرایه وجود دارد یا نه
             for (var i = 0; i < arr.length; i++) {
-                if (arr[i].slice(0, arr.indexOf(':') - 1) == code) {
+                var temp= arr[i].split(':');
+                if (temp[0]== code) {
                     jQuery("#btn-Cart").removeClass("actn add-to-cart");
                     //alert('کالا در سبد خرید شما قبلا اضافه شده است..');
                     exist = true;
@@ -290,7 +291,7 @@
             if (!exist) {
 
                 //اضافه کردن عنصر جد ید ارایه ای که قبلا در کوکی ذخیره شده بود
-                arr.push(code + ':1');
+                arr.push(code + ':1'+':'+quantity);
                 Cookies.set(BasketCookie, JSON.stringify(arr));
                 //اضافه کردن یک واحد به تعداد آبتم های داخل سبد کالا
                 var ct = parseInt(Cookies.get(BasketCountCooki)) + 1;
@@ -453,28 +454,28 @@
     }
     var result=false;
     function fileExists(fileLocation) {
-       
-         $.ajax({
-         
+
+        $.ajax({
+
             type: 'HEAD',
-            url: fileLocation, 
+            url: fileLocation,
             async:false,
-           
+
             success: function() {
                 result = true;
-                
+
             },
-              
+
             error: function() {
-               
+
                 result = false;
             }
-            
-        });
-        
-     }
 
-   
+        });
+
+    }
+
+
 
     //Price Filter
     function GetPricePageData()
@@ -507,8 +508,8 @@
             },
             success: function (data) {
                 if (!data.result ) {
-           
-                    
+
+
                     for (var i = 0; i < data.Data.length; i++) {
                         proucts += "<li class='product'>";
                         proucts += "<figure class='img-animi'>";
@@ -516,15 +517,22 @@
                         {
                             proucts+= "<div class='tag new'>"+'%'+""+data.Data[i].DiscountPercent+"</div>";
                         }
+                        if(data.Data[i].HasRemiand==false){
 
+                            proucts+= "<div class='quntity'>"+"ناموجود"+"</div>";
+                        }
                         proucts += "<div class='actions trans'>";
                         proucts += "<a class='link-layer' href='#'>&nbsp;</a>";
                         proucts += "<a  class='actn add-to-favorite' data-toggle='tooltip' data-placement='top' onclick='addtowishlist("+data.Data[i].ID+")' title='Add to Wishlist'><i class='pe-7s-like'></i></a>";
-                        proucts += "<a  class='actn add-to-cart' data-toggle='tooltip' data-placement='top' onclick='addtocart("+data.Data[i].BarCode+")'  title='Add to Cart'><i class='pe-7s-cart'></i></a>";
+                        if(data.Data[i].HasRemiand==true)
+                        {
+                            proucts += "<a  class='actn add-to-cart' data-toggle='tooltip' data-placement='top' onclick='addtocart(\"" + data.Data[i].BarCode + "\","+data.Data[i].Remained+")'  title='Add to Cart'><i class='pe-7s-cart'></i></a>";
+                        }
+
                         proucts += "<a  onclick='test()'  class='actn' data-toggle='tooltip' data-placement='top' data-rel='quickview-popup' title='Quick View'><i class='pe-7s-look'></i></a>";
                         proucts += "</div>";
                         var file= "@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/"+data.Data[i].BarCode+".png";
-                       fileExists(file);
+                        fileExists(file);
                         //if image exists
                         if(result==true)
                         {
@@ -532,7 +540,7 @@
                         }
                         else
                         {
-                       
+
                             proucts += "<a  href='/Product/Product?GoodID="+data.Data[i].ID+ "'><img src='@(JahanAraShop.Application.Resources.Paths.ImageFolder)Products/defult.png' alt=''></a>";
                         }
                         proucts += "</div>";
@@ -584,8 +592,8 @@
                         }
                     });
                 }
-              
-               
+
+
                 if(data.Data.length==0){
 
                     $(".product-listing").hide();
@@ -603,7 +611,7 @@
                     $('.products').show();
                     $('.bottom-sorting').show();
                 }
-                
+
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -770,7 +778,7 @@
 
     }
 
-    function ReplaceNumberWithCommas(yourNumber) 
+    function ReplaceNumberWithCommas(yourNumber)
     {
         if(yourNumber!=null)
         {
@@ -780,7 +788,7 @@
         }
         else
         {
-             return 0;
+            return 0;
         }
     }
 
@@ -884,5 +892,4 @@
     }*@
 
 </script>
-    
-      
+
